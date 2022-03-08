@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.medicalreminder">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,12 +11,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicalReminder">
-        <activity android:name=".MainActivity">
+        <activity android:name=".screens.addmedicationscreen.AddMedOnSave"></activity>
+        <activity android:name=".screens.addmedicationscreen.AddMedTakingTimeForDay" />
+        <activity android:name=".screens.addmedicationscreen.AddMedRepeatingPeriod" />
+        <activity android:name=".screens.addmedicationscreen.AddMedRepeatFrequency" />
+        <activity android:name=".screens.addmedicationscreen.AddMedReason" />
+        <activity android:name=".screens.addmedicationscreen.AddMedStrength" />
+        <activity android:name=".screens.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".screens.addmedicationscreen.AddMedForm" />
+        <activity android:name=".screens.addmedicationscreen.AddMedication" />
+        <activity android:name=".MainActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 
