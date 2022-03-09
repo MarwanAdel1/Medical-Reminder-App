@@ -5,7 +5,7 @@
     android:background="@color/addMedicationBackgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.SplashScreen">
+    tools:context=".views.SplashScreen">
 
     <TextView
         android:id="@+id/splash_tx_id"

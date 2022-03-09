@@ -1,9 +1,13 @@
-package com.example.medicalreminder.screens.addmedicationscreen;
+package com.example.medicalreminder.views.add_medication_screen.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,33 +15,51 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.adapters.MedAdatpter;
 import com.example.medicalreminder.data.MedRepeating;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.AdapterClickListener;
+import com.example.medicalreminder.views.AdapterClickListener;
+import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
 
-public class AddMedRepeatingPeriod extends AppCompatActivity implements AdapterClickListener {
+public class AddMedRepeatingPeriodFragment extends Fragment implements AdapterClickListener {
     private RecyclerView recyclerView;
+
+    private AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator;
 
     private Medicine medicine;
 
+    public AddMedRepeatingPeriodFragment(AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator, Medicine medicine) {
+        this.addMedicineFragmentsCommunicator = addMedicineFragmentsCommunicator;
+        this.medicine = medicine;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_med_repeating_period);
+    }
 
-        medicine = (Medicine) getIntent().getSerializableExtra("obj");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_add_med_repeating_period, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         MedAdatpter medAdatpter = null;
         if (medicine.getMedRepeatingFrequency() == 1) {
-            medAdatpter = new MedAdatpter(this, MedRepeating.dailyRepeated, this);
+            medAdatpter = new MedAdatpter(getActivity().getApplicationContext(), MedRepeating.dailyRepeated, this);
         } else if (medicine.getMedRepeatingFrequency() == 2) {
-            medAdatpter = new MedAdatpter(this, MedRepeating.notDailyRepeated, this);
+            medAdatpter = new MedAdatpter(getActivity().getApplicationContext(), MedRepeating.notDailyRepeated, this);
         } else if (medicine.getMedRepeatingFrequency() == 0) {
 
         }
 
-        recyclerView = findViewById(R.id.recycler_view_id);
+        recyclerView = view.findViewById(R.id.recycler_view_id);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(medAdatpter);
     }
@@ -61,10 +83,8 @@ public class AddMedRepeatingPeriod extends AppCompatActivity implements AdapterC
                 medicine.setMedRepeatingPerDay(6);
                 medicine.setMedRepeatingPerWeek(0);
             }
+            addMedicineFragmentsCommunicator.setMedRepeatingPeriod(1, medicine);
 
-            Intent dailyIntent = new Intent(AddMedRepeatingPeriod.this, AddMedTakingTimeForDay.class);
-            dailyIntent.putExtra("obj", medicine);
-            startActivity(dailyIntent);
         } else if (medicine.getMedRepeatingFrequency() == 2) { /// repeated not daily
             if (medData.equalsIgnoreCase(MedRepeating.notDailyRepeated[0])) { // once a week
                 medicine.setMedRepeatingPerDay(0);
@@ -85,6 +105,7 @@ public class AddMedRepeatingPeriod extends AppCompatActivity implements AdapterC
                 medicine.setMedRepeatingPerDay(0);
                 medicine.setMedRepeatingPerWeek(6);
             }
+            addMedicineFragmentsCommunicator.setMedRepeatingPeriod(2, medicine);
         }
     }
 }

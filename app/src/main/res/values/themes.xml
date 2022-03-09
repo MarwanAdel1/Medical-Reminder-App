@@ -13,6 +13,11 @@
         <item name="android:statusBarColor">@color/addMedicationBackgroundColor</item>
     </style>
 
+    <style name="bottomNavigationBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@color/addMedicationBackgroundColor</item>
+        <item name="android:statusBarColor">@color/addMedicationBackgroundColor</item>
+    </style>
+
     <style name="AddMedication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/addMedicationBackgroundColor</item>
     </style>

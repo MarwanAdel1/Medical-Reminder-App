@@ -1,37 +1,59 @@
-package com.example.medicalreminder.screens.addmedicationscreen;
+package com.example.medicalreminder.views.add_medication_screen.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.data.MedStrength;
 import com.example.medicalreminder.pojo.Medicine;
+import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
 
-public class AddMedStrength extends AppCompatActivity {
-    private String[] spinnerValue;
+public class AddMedStrengthFragment extends Fragment {
+    private String[] spinnerValue = {};
     private String spinnerResult;
     private Medicine medicine;
 
     private Button toReasonBt;
     private EditText strengthValue;
 
+    private AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator;
+
+    public AddMedStrengthFragment(AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator, Medicine medicine) {
+        this.addMedicineFragmentsCommunicator = addMedicineFragmentsCommunicator;
+        this.medicine=medicine;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_med_strength);
+    }
 
-        toReasonBt = findViewById(R.id.toreson_bt);
-        strengthValue = findViewById(R.id.med_strength_et_id);
 
-        Spinner spin = (Spinner) findViewById(R.id.spinner);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_add_med_strength, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        toReasonBt = view.findViewById(R.id.toreson_bt);
+        strengthValue = view.findViewById(R.id.med_strength_et_id);
+
+        Spinner spin = (Spinner) view.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -45,8 +67,6 @@ public class AddMedStrength extends AppCompatActivity {
         });
 
         ArrayAdapter arrayAdapter = null;
-
-        medicine = (Medicine) getIntent().getSerializableExtra("obj");
 
         if (medicine.getMedForm().equalsIgnoreCase("pill")) {
             spinnerValue = MedStrength.pillStrength;
@@ -62,7 +82,7 @@ public class AddMedStrength extends AppCompatActivity {
             spinnerValue = MedStrength.inhalerStrength;
         }
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerValue);
+        arrayAdapter = new ArrayAdapter(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, spinnerValue);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(arrayAdapter);
 
@@ -70,11 +90,7 @@ public class AddMedStrength extends AppCompatActivity {
         toReasonBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                medicine.setMedStrength(Integer.parseInt(strengthValue.getText().toString()));
-                medicine.setMedStrengthUnit(spinnerResult);
-                Intent intent = new Intent(AddMedStrength.this, AddMedReason.class);
-                intent.putExtra("obj", medicine);
-                startActivity(intent);
+                addMedicineFragmentsCommunicator.setMedStrength(Integer.parseInt(strengthValue.getText().toString()), spinnerResult);
             }
         });
     }

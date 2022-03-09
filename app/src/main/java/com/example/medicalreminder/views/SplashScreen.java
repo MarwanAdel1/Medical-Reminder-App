@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens;
+package com.example.medicalreminder.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.screens.addmedicationscreen.AddMedication;
+import com.example.medicalreminder.views.add_medication_screen.AddMedicationActivityScreen;
+import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedNameFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
@@ -46,8 +47,8 @@ public class SplashScreen extends AppCompatActivity {
         asyncHttpClient.get(url, new FileAsyncHttpResponseHandler(this) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                Log.e(AddMedication.class.getSimpleName(), "Failed : " + statusCode);
-                Log.e(AddMedication.class.getSimpleName(), "Failed : " + file.getName());
+                Log.e(AddMedNameFragment.class.getSimpleName(), "Failed : " + statusCode);
+                Log.e(AddMedNameFragment.class.getSimpleName(), "Failed : " + file.getName());
             }
 
             @Override
@@ -71,7 +72,7 @@ public class SplashScreen extends AppCompatActivity {
                                 diseases.add(row[1].getContents());
                             }
                         }
-                        Intent intent = new Intent(SplashScreen.this, AddMedication.class);
+                        Intent intent = new Intent(SplashScreen.this, AddMedicationActivityScreen.class);
                         startActivity(intent);
                     } catch (IOException e) {
                         e.printStackTrace();
