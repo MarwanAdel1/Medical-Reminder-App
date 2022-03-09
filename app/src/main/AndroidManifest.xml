@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicalReminder">
+        <activity android:name=".views.login_screen.LoginScreen"></activity>
         <activity android:name=".views.medication_drug_screen.EditMedicationDrugScreen" />
-        <activity android:name=".views.medication_drug_screen.MedicationDrugScreen" >
-        </activity>
+        <activity android:name=".views.medication_drug_screen.MedicationDrugScreen"></activity>
         <activity android:name=".views.add_medication_screen.fragments.AddMedTakingTimeForWeekFragment" />
         <activity android:name=".views.add_medication_screen.fragments.AddMedOnSaveFragment" />
         <activity android:name=".views.add_medication_screen.fragments.AddMedTakingTimeForDayFragment" />
@@ -21,14 +21,15 @@
         <activity android:name=".views.add_medication_screen.fragments.AddMedRepeatFrequencyFragment" />
         <activity android:name=".views.add_medication_screen.fragments.AddMedReasonFragment" />
         <activity android:name=".views.add_medication_screen.fragments.AddMedStrengthFragment" />
-        <activity android:name=".views.SplashScreen" android:theme="@style/bottomNavigationBar">
+        <activity
+            android:name=".views.SplashScreen"
+            android:theme="@style/bottomNavigationBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".views.add_medication_screen.AddMedicationActivityScreen">
 
             <!-- <intent-filter> -->

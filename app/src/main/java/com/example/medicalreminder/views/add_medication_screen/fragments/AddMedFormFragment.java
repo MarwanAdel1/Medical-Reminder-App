@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.views.AdapterClickListener;
 import com.example.medicalreminder.adapters.MedAdatpter;
-import com.example.medicalreminder.pojo.Medicine;
+import com.example.medicalreminder.views.add_medication_screen.AdapterClickListener;
 import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 public class AddMedFormFragment extends Fragment implements AdapterClickListener {
