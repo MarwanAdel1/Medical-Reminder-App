@@ -9,4 +9,6 @@
     <string name="MedHowOften">How often do you take this medicine?</string>
     <string name="profile_name">User Name</string>
     <string name="edit_profile">Edit Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.medicalreminder;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +22,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.medicalreminder.adddependent.AddDependentFragment;
+import com.example.medicalreminder.adddependent.DependentActivity;
+import com.example.medicalreminder.addmedfriend.MedfriendActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -208,7 +212,24 @@ public class TabBar extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         drawerLayout.closeDrawers();
-                        Toast.makeText(TabBar.this, menuItem.toString(), Toast.LENGTH_SHORT).show();
+                        Fragment dfragment = null;
+                        if(menuItem.toString().equals("Add Dependent")){
+                            dfragment = new AddDependentFragment();
+
+                            Intent intent = new Intent(TabBar.this , DependentActivity.class );
+                            startActivity(intent);
+                            Toast.makeText(TabBar.this, "Add Dependent", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (menuItem.toString().equals("Invite Medfriend")){
+                           // dfragment = new;
+                            Intent intent = new Intent(TabBar.this , MedfriendActivity.class );
+                            startActivity(intent);
+
+                            Toast.makeText(TabBar.this, "Invite Medfriend", Toast.LENGTH_SHORT).show();
+
+                        }
+                        //Toast.makeText(TabBar.this, menuItem.toString(), Toast.LENGTH_SHORT).show();
                         // add code here to update the UI based on the item selected
                         // for example swap UI fragment here
                         return true;
