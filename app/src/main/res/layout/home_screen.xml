@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/full_drawable_layout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--            Top Tab layout                -->
+            <androidx.appcompat.widget.Toolbar
+                android:background="@color/addMedicationBackgroundColor"
+                android:id="@+id/nav_toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/tool_bar_menu"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+            </androidx.appcompat.widget.Toolbar>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="40dp"
+                android:id="@+id/add_floating_btn"
+                android:background="@drawable/ripple_btn"
+                android:backgroundTint="@color/addMedicationBackgroundColor"
+                app:fabCustomSize="50dp"
+                android:src="@drawable/ic_add_24"
+                android:onClick="press"
+                app:layout_constraintBottom_toTopOf="@+id/buttom_tab_layout"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                app:fabCustomSize="50dp"
+                android:id="@+id/add_medication_btn"
+                android:text="Add Medication"
+                android:onClick="press"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/addMedicationBackgroundColor"
+                app:layout_constraintEnd_toEndOf="@+id/add_floating_btn"
+                app:layout_constraintBottom_toTopOf="@id/add_health_tracker_btn"
+                android:visibility="invisible">
+            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                app:fabCustomSize="50dp"
+                android:id="@+id/add_health_tracker_btn"
+                android:text="Add Health Tracker"
+                android:backgroundTint="@color/addMedicationBackgroundColor"
+                android:onClick="press"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/add_floating_btn"
+                app:layout_constraintBottom_toTopOf="@id/add_dose_btn"
+                android:visibility="invisible">
+            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                app:fabCustomSize="50dp"
+                android:id="@+id/add_dose_btn"
+                android:text="Add Dose"
+                android:onClick="press"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/addMedicationBackgroundColor"
+                app:layout_constraintEnd_toEndOf="@+id/add_floating_btn"
+                app:layout_constraintBottom_toTopOf="@id/add_floating_btn"
+                android:visibility="invisible">
+            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                app:layout_constraintTop_toBottomOf="@id/nav_toolBar"
+                app:layout_constraintBottom_toTopOf="@id/buttom_tab_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+            </androidx.viewpager.widget.ViewPager>
+
+            <!--            Buttom Tab layout                -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/buttom_tab_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_home_24"
+                    android:text="Home"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@mipmap/ic_pill"
+                    android:text="Medications"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_settings_24"
+                    android:text="Settings">
+                </com.google.android.material.tabs.TabItem>
+            </com.google.android.material.tabs.TabLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/drawer_view_menus"
+            app:headerLayout="@layout/menu_header"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
