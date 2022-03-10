@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#41678E"
+    android:background="@color/addMedicationBackgroundColor"
     tools:context=".addmedfriend.MedfriendPendingFragment">
 
     <TextView
@@ -54,9 +54,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="405dp"
-        android:layout_height="514dp"
-        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".75"
+        android:background="@drawable/shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -79,7 +80,8 @@
             android:id="@+id/resendInvitation_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_shape"
             android:text="Resend Invitation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.23"
