@@ -8,9 +8,10 @@ public class Medicine implements Serializable {
     private double medStrength;
     private String medStrengthUnit;
     private String medReason;
-    private int medRepeatingFrequency;  /// 0 for only as needed - 1,2 for repeated
+    private int medRepeatingFrequency;  /// 0 for only as needed , 1 for yes ,2 for no /// repeated
     private int medRepeatingPerDay;
     private int medRepeatingPerWeek;
+    
 
     public int getMedRepeatingPerDay() {
         return medRepeatingPerDay;

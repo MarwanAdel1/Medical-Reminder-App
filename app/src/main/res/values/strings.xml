@@ -7,4 +7,7 @@
     <string name="MedReason">What are you taking it for?</string>
     <string name="MedRepeatFrequently">Do you need to take this medicine every day?</string>
     <string name="MedHowOften">How often do you take this medicine?</string>
+    <string name="profile_name">User Name</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="login">Login</string>
 </resources>

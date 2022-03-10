@@ -1,5 +1,6 @@
 package com.example.medicalreminder.views.login_screen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.views.SplashScreen;
 
 public class LoginScreen extends AppCompatActivity {
     TextView email_field;
@@ -32,7 +34,7 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 email = email_field.getText().toString();
                 password = password_field.getText().toString();
-                Toast.makeText(LoginScreen.this, "Email: " + email + ", Password: " + password, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginScreen.this, SplashScreen.class));
             }
         });
 

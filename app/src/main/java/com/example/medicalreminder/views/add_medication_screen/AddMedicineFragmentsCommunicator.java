@@ -21,5 +21,4 @@ public interface AddMedicineFragmentsCommunicator {
     public void setMedNumberOfRepeatingPerday();
 
     public void setMedRepeatingPeriod(int choice, Medicine medicine);
-
 }

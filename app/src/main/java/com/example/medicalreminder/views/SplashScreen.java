@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedNameFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -72,7 +71,7 @@ public class SplashScreen extends AppCompatActivity {
                                 diseases.add(row[1].getContents());
                             }
                         }
-                        Intent intent = new Intent(SplashScreen.this, AddMedicationActivityScreen.class);
+                        Intent intent = new Intent(SplashScreen.this, TabBar.class);
                         startActivity(intent);
                     } catch (IOException e) {
                         e.printStackTrace();
