@@ -38,7 +38,7 @@ public class AddMedicinePresenter implements AddMedicinePresenterInterface {
     public void savingProccesToFirebase(Medicine medicine) {
         firebaseFirestore.collection("Medicines")
                 .document(firebaseAuth.getCurrentUser().getEmail())
-                .collection("Dependant Name/Active")
+                .collection("Dependant Name")
                 .document(medicine.getMedName())
                 .set(medicine)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
