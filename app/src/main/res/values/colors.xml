@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="red">#ff1818</color>
+
+    <color name="addMedicationBackgroundColor">#304ffe</color>
+    <color name="addMedicationBackgroundColorDark">#0026ca</color>
+    <color name="gray">#eceff1</color>
 </resources>
