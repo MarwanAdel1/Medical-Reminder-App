@@ -1,11 +1,9 @@
-package com.example.medicalreminder.views.add_medication_screen.fragments;
+package com.example.medicalreminder.views.add_medication_screen.view.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +13,7 @@ import android.widget.TextView;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
-import com.example.medicalreminder.views.medication_drug_screen.MedicationDrugScreen;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicineFragmentsCommunicator;
 
 public class AddMedOnSaveFragment extends Fragment {
     private Medicine medicine;

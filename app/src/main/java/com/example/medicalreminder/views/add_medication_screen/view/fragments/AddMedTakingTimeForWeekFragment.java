@@ -1,8 +1,7 @@
-package com.example.medicalreminder.views.add_medication_screen.fragments;
+package com.example.medicalreminder.views.add_medication_screen.view.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicineFragmentsCommunicator;
 
 public class AddMedTakingTimeForWeekFragment extends Fragment {
     private AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator;

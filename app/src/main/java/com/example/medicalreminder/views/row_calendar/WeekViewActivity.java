@@ -1,8 +1,6 @@
 package com.example.medicalreminder.views.row_calendar;
 
-import static com.example.medicalreminder.views.row_calendar.CalendarUtils.daysInMonthArray;
-import static com.example.medicalreminder.views.row_calendar.CalendarUtils.daysInWeekArray;
-import static com.example.medicalreminder.views.row_calendar.CalendarUtils.monthYearFromDate;
+import static com.example.medicalreminder.views.row_calendar.CalendarUtils.*;
 
 import android.content.Intent;
 import android.os.Build;
@@ -21,7 +19,7 @@ import com.example.medicalreminder.R;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class WeekViewActivity extends AppCompatActivity implements com.example.medicalreminder.views.row_calendar.CalendarAdapter.OnItemListener
+public class WeekViewActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener
 {
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
@@ -51,7 +49,7 @@ public class WeekViewActivity extends AppCompatActivity implements com.example.m
         monthYearText.setText(monthYearFromDate(CalendarUtils.selectedDate));
         ArrayList<LocalDate> daysInMonth = daysInMonthArray(CalendarUtils.selectedDate);
 
-        com.example.medicalreminder.views.row_calendar.CalendarAdapter calendarAdapter = new com.example.medicalreminder.views.row_calendar.CalendarAdapter(daysInMonth, this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);

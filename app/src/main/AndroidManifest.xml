@@ -40,7 +40,7 @@
             android:theme="@style/bottomNavigationBar"></activity>
         <activity android:name=".views.add_dependent_screen.DependentActivity" />
         <activity android:name=".views.addmedfriend.MedfriendActivity" />
-        <activity android:name=".views.add_medication_screen.AddMedicationActivityScreen">
+        <activity android:name=".views.add_medication_screen.view.AddMedicationActivityScreen">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->

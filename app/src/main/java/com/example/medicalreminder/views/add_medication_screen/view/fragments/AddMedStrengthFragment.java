@@ -1,4 +1,4 @@
-package com.example.medicalreminder.views.add_medication_screen.fragments;
+package com.example.medicalreminder.views.add_medication_screen.view.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.data.MedStrength;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicineFragmentsCommunicator;
 
 public class AddMedStrengthFragment extends Fragment {
     private String[] spinnerValue = {};

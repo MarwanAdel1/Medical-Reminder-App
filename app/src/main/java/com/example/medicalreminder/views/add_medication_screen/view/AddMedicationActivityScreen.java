@@ -1,30 +1,39 @@
-package com.example.medicalreminder.views.add_medication_screen;
+package com.example.medicalreminder.views.add_medication_screen.view;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedFormFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedNameFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedOnSaveFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedReasonFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedRepeatFrequencyFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedRepeatingPeriodFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedStrengthFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedTakingTimeForDayFragment;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedTakingTimeForWeekFragment;
+import com.example.medicalreminder.views.add_medication_screen.presenter.AddMedicinePresenter;
+import com.example.medicalreminder.views.add_medication_screen.presenter.AddMedicinePresenterInterface;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedFormFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedNameFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedOnSaveFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedReasonFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedRepeatFrequencyFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedRepeatingPeriodFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedStrengthFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedTakingTimeForDayFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedTakingTimeForWeekFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AddMedicationActivityScreen extends AppCompatActivity implements AddMedicineFragmentsCommunicator {
+public class AddMedicationActivityScreen extends AppCompatActivity implements AddMedicineFragmentsCommunicator, AddMedicineViewInterface {
+    private Medicine medicine = new Medicine();
+    private Fragment[] medicineFragment = new Fragment[9];
+    private FragmentManager fragmentManager;
+    private int currentFragment = 0;
+    private boolean dayFlag = false;
 
-    Medicine medicine = new Medicine();
-    Fragment[] medicineFragment = new Fragment[9];
-    FragmentManager fragmentManager;
-    int currentFragment = 0;
-    boolean dayFlag=false;
+    private AddMedicinePresenterInterface addMedicinePresenterInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +46,11 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
 
         fragmentManager.beginTransaction().add(R.id.FragmentContainerView, medicineFragment[currentFragment]).commit();
 
+        addMedicinePresenterInterface = new AddMedicinePresenter(this);
+
     }
 
-    void initFragments() {
+    public void initFragments() {
         medicineFragment[0] = new AddMedNameFragment(this);
         medicineFragment[1] = new AddMedFormFragment(this);
         medicineFragment[2] = new AddMedStrengthFragment(this, medicine);
@@ -54,16 +65,18 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
     }
 
 
+
+
     @Override
     public void onBackPressed() {
-        if (currentFragment == 7 ) {
+        if (currentFragment == 7) {
             currentFragment -= 2;
             fragmentManager.beginTransaction().replace(R.id.FragmentContainerView, medicineFragment[currentFragment]).commit();
         }
 
-        if(currentFragment==8 && dayFlag){
+        if (currentFragment == 8 && dayFlag) {
             currentFragment -= 2;
-            dayFlag=false;
+            dayFlag = false;
             fragmentManager.beginTransaction().replace(R.id.FragmentContainerView, medicineFragment[currentFragment]).commit();
         }
 
@@ -117,7 +130,7 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
 
     @Override
     public void saveMedicine(Medicine medicine) {
-        ///// save on database here
+        addMedicineToFirebaseFirestore(medicine);
         finish();
     }
 
@@ -132,12 +145,12 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
         for (int i = 0; i < medicine.getMedRepeatingPerDay(); i++) {
             fragmentManager.beginTransaction().replace(R.id.FragmentContainerView, medicineFragment[currentFragment]).commit();
         }
-        dayFlag=true;
+        dayFlag = true;
         nextFragment(2);
     }
 
     @Override
-    public void setMedRepeatingPeriod(int choice,Medicine medicine) {
+    public void setMedRepeatingPeriod(int choice, Medicine medicine) {
         this.medicine = medicine;
         if (choice == 1) {
             nextFragment(1);
@@ -146,4 +159,8 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
         }
     }
 
+    @Override
+    public void addMedicineToFirebaseFirestore(Medicine medicine) {
+        addMedicinePresenterInterface.addMedicine(medicine);
+    }
 }

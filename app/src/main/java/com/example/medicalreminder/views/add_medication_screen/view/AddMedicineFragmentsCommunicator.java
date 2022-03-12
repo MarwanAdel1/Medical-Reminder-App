@@ -1,4 +1,4 @@
-package com.example.medicalreminder.views.add_medication_screen;
+package com.example.medicalreminder.views.add_medication_screen.view;
 
 import com.example.medicalreminder.pojo.Medicine;
 

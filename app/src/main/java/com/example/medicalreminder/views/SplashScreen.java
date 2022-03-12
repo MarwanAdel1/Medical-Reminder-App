@@ -1,7 +1,6 @@
 package com.example.medicalreminder.views;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.views.add_medication_screen.fragments.AddMedNameFragment;
+import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedNameFragment;
 import com.example.medicalreminder.views.login_screen.LoginScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
@@ -19,7 +18,6 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 import cz.msebera.android.httpclient.Header;
 import jxl.Cell;

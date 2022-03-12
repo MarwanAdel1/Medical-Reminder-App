@@ -24,7 +24,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.views.add_dependent_screen.AddDependentFragment;
 import com.example.medicalreminder.views.add_dependent_screen.DependentActivity;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicationActivityScreen;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.addmedfriend.MedfriendActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;

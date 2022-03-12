@@ -18,7 +18,7 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.views.medication.MedicationModel;
 import com.example.medicalreminder.views.medication.MedicationRecycleViewAdapter;
 import com.example.medicalreminder.views.medication.OnMedClickListener;
-import com.example.medicalreminder.views.add_medication_screen.AddMedicationActivityScreen;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.medication_drug_screen.MedicationDrugScreen;
 
 import java.util.ArrayList;
