@@ -127,15 +127,14 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
         inactiveRecycleView.setLayoutManager(layoutManager1);
         inactiveRecycleView.setAdapter(adapter1);
 
-
     }
 
-
     @Override
-    public void onClick(Medicine model) {
+    public void onClick(Medicine model , int position) {
         // move to datails fragment
+        // you have the model here
 
         startActivity(new Intent(getActivity().getApplicationContext(), MedicationDrugScreen.class));
-        Toast.makeText(getContext(), "onClick", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "onClick : " + position + " name " + model.getMedName(), Toast.LENGTH_SHORT).show();
     }
 }

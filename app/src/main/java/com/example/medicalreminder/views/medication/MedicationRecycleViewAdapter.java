@@ -45,9 +45,9 @@ public class MedicationRecycleViewAdapter extends RecyclerView.Adapter<Medicatio
             @Override
             public void onClick(View view) {
                 // on item click
-                Toast.makeText(view.getContext(), "kj : "+ myItems.get(position).getMedName(), Toast.LENGTH_SHORT).show();
-                myItems.get(position);
-                listener.onClick(model);
+                //Toast.makeText(view.getContext(), "kj : "+ model.getMedName(), Toast.LENGTH_SHORT).show();
+
+                listener.onClick(model , position);
             }
         });
 
