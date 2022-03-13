@@ -8,7 +8,7 @@
         android:id="@+id/drugImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@android:drawable/btn_star_big_on" />
+        android:src="@drawable/midicine" />
 
     <TextView
         android:id="@+id/drugNametext"

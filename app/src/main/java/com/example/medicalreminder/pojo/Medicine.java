@@ -12,6 +12,11 @@ public class Medicine implements Serializable {
     private int medRepeatingPerDay;
     private int medRepeatingPerWeek;
     
+    public Medicine( String medName , String medForm){
+        this.medName = medName ;
+        this.medForm = medForm ;
+    }
+    public  Medicine(){}
 
     public int getMedRepeatingPerDay() {
         return medRepeatingPerDay;

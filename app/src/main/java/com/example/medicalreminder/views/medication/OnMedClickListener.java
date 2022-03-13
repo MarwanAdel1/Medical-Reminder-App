@@ -1,6 +1,8 @@
 package com.example.medicalreminder.views.medication;
 
+import com.example.medicalreminder.pojo.Medicine;
+
 public interface OnMedClickListener {
 
-    void onClick(MedicationModel model) ;
+    void onClick(Medicine model) ;
 }

@@ -1,24 +1,27 @@
 package com.example.medicalreminder.views.medication;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.pojo.Medicine;
 
 import java.util.ArrayList;
 
 public class MedicationRecycleViewAdapter extends RecyclerView.Adapter<MedicationRecycleViewAdapter.MedicationViewHolder> {
 
-    private ArrayList<MedicationModel> myItems ;
+    private ArrayList<Medicine> myItems ;
     private OnMedClickListener listener ;
 
-    public MedicationRecycleViewAdapter( OnMedClickListener listener , ArrayList<MedicationModel>myItems){
+    public MedicationRecycleViewAdapter( OnMedClickListener listener , ArrayList<Medicine>myItems){
         this.myItems=myItems;
         this.listener = listener ;
     }
@@ -32,16 +35,18 @@ public class MedicationRecycleViewAdapter extends RecyclerView.Adapter<Medicatio
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MedicationViewHolder holder, int position) {
-        MedicationModel model = myItems.get(position);
-        holder.drugNametext.setText(myItems.get(position).getDrugName());
-        holder.numberOfDrugstext.setText(String.valueOf(myItems.get(position).getDrugsNumber()));
-        holder.drugImage.setImageResource((myItems.get(position).getImage()));
+    public void onBindViewHolder(@NonNull MedicationViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        Medicine model = myItems.get(position);
+        holder.drugNametext.setText(myItems.get(position).getMedName());
+        holder.numberOfDrugstext.setText(String.valueOf(myItems.get(position).getMedForm()));
+        //holder.drugImage.setImageResource((myItems.get(position).getImage()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // on item click
+                Toast.makeText(view.getContext(), "kj : "+ myItems.get(position).getMedName(), Toast.LENGTH_SHORT).show();
+                myItems.get(position);
                 listener.onClick(model);
             }
         });

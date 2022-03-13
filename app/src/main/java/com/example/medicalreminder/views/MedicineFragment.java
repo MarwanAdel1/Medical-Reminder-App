@@ -2,6 +2,7 @@ package com.example.medicalreminder.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.views.medication.MedicationModel;
 import com.example.medicalreminder.views.medication.MedicationRecycleViewAdapter;
 import com.example.medicalreminder.views.medication.OnMedClickListener;
 import com.example.medicalreminder.views.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.medication_drug_screen.MedicationDrugScreen;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -27,7 +40,10 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
 
     MedicationRecycleViewAdapter adapter;
     RecyclerView activeRecycleView, inactiveRecycleView;
-    ArrayList<MedicationModel> activeList, inactiveList;
+    ArrayList<Medicine> activeList, inactiveList;
+    private FirebaseFirestore firestore ;
+    private FirebaseAuth firebaseAuth;
+
     Button addmedicatonbtn;
 
 
@@ -50,6 +66,8 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
         activeRecycleView = view.findViewById(R.id.activerecycleview);
         inactiveRecycleView = view.findViewById(R.id.inactiverecycleview);
         addmedicatonbtn = view.findViewById(R.id.addmedicatonbtn);
+        firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         addmedicatonbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,22 +77,47 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
             }
         });
 
-        // active list
         activeList = new ArrayList<>();
-        activeList.add(new MedicationModel(R.drawable.ic_launcher_background, "first ", "6"));
-        activeList.add(new MedicationModel(R.drawable.ic_launcher_background, "first ", "6"));
+       // activeList.add(new Medicine( "first ", "6"));
 
 
-        MedicationRecycleViewAdapter adapter = new MedicationRecycleViewAdapter(this, activeList);
+        adapter = new MedicationRecycleViewAdapter(this, activeList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext()); // , LinearLayoutManager.HORIZONTAL , false
         activeRecycleView.setHasFixedSize(true);
         activeRecycleView.setLayoutManager(layoutManager);
         activeRecycleView.setAdapter(adapter);
 
+       // Medicine medicine = new Medicine();
+
+
+
+        firestore.collection("Medicines").document(firebaseAuth.getCurrentUser().getEmail()).collection("Dependant Name").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if( error != null ){
+                    Log.d("TAG", "Error : "+error.getMessage());
+                }
+                for (DocumentChange doc : value.getDocumentChanges()){
+                    if(doc.getType() == DocumentChange.Type.ADDED){
+
+                        Medicine model = doc.getDocument().toObject(Medicine.class);
+                        activeList.add(model);
+                        adapter.notifyDataSetChanged();
+
+                        // String username = doc.getDocument().getString("name");
+                        // Log.d("TAG", "name : "+username);
+                    }
+                }
+            }
+        });
+
+
+        // active list
+
         // inactive list
         inactiveList = new ArrayList<>();
-        inactiveList.add(new MedicationModel(R.drawable.ic_launcher_foreground, "second ", "6"));
-        inactiveList.add(new MedicationModel(R.drawable.ic_launcher_foreground, "second ", "6"));
+        inactiveList.add(new Medicine( "second ", "6"));
+        inactiveList.add(new Medicine( "second ", "6"));
 
 
         MedicationRecycleViewAdapter adapter1 = new MedicationRecycleViewAdapter(this, inactiveList);
@@ -89,8 +132,9 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
 
 
     @Override
-    public void onClick(MedicationModel model) {
+    public void onClick(Medicine model) {
         // move to datails fragment
+
         startActivity(new Intent(getActivity().getApplicationContext(), MedicationDrugScreen.class));
         Toast.makeText(getContext(), "onClick", Toast.LENGTH_SHORT).show();
     }
