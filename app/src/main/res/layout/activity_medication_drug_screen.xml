@@ -66,21 +66,23 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:gravity="start|bottom"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text="Adol"
+                android:id="@+id/med_name_id"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|bottom"
+                android:text="Adol"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <TextView
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text="1000 g"
+                android:id="@+id/med_strength_id"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="1000 g"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </LinearLayout>
 

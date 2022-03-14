@@ -17,17 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.views.medication.MedicationModel;
+import com.example.medicalreminder.views.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.medication.MedicationRecycleViewAdapter;
 import com.example.medicalreminder.views.medication.OnMedClickListener;
-import com.example.medicalreminder.views.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.views.medication_drug_screen.MedicationDrugScreen;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -41,7 +35,7 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
     MedicationRecycleViewAdapter adapter;
     RecyclerView activeRecycleView, inactiveRecycleView;
     ArrayList<Medicine> activeList, inactiveList;
-    private FirebaseFirestore firestore ;
+    private FirebaseFirestore firestore;
     private FirebaseAuth firebaseAuth;
 
     Button addmedicatonbtn;
@@ -78,7 +72,7 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
         });
 
         activeList = new ArrayList<>();
-       // activeList.add(new Medicine( "first ", "6"));
+        // activeList.add(new Medicine( "first ", "6"));
 
 
         adapter = new MedicationRecycleViewAdapter(this, activeList);
@@ -87,37 +81,63 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
         activeRecycleView.setLayoutManager(layoutManager);
         activeRecycleView.setAdapter(adapter);
 
-       // Medicine medicine = new Medicine();
+        // Medicine medicine = new Medicine();
 
 
+        firestore.collection("Medicines")
+                .document(firebaseAuth.getCurrentUser().getEmail())
+                .collection("Dependant Name")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("TAG", "Error : " + error.getMessage());
+                        }
 
-        firestore.collection("Medicines").document(firebaseAuth.getCurrentUser().getEmail()).collection("Dependant Name").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if( error != null ){
-                    Log.d("TAG", "Error : "+error.getMessage());
-                }
-                for (DocumentChange doc : value.getDocumentChanges()){
-                    if(doc.getType() == DocumentChange.Type.ADDED){
+                        activeList.clear();
 
-                        Medicine model = doc.getDocument().toObject(Medicine.class);
-                        activeList.add(model);
+                        for (QueryDocumentSnapshot doc : value) {
+                            Medicine medicine = new Medicine();
+
+                            medicine.setMedName(doc.getString("medName"));
+                            medicine.setMedForm(doc.getString("medForm"));
+                            medicine.setMedStrength(doc.getDouble("medStrength"));
+                            medicine.setMedStrengthUnit(doc.getString("medStrengthUnit"));
+                            medicine.setMedReason(doc.getString("medReason"));
+                            medicine.setMedRepeatingFrequency(doc.getLong("medRepeatingFrequency").intValue());
+                            medicine.setMedRepeatingPerDay(doc.getLong("medRepeatingPerDay").intValue());
+                            medicine.setMedRepeatingPerWeek(doc.getLong("medRepeatingPerWeek").intValue());
+
+
+                            activeList.add(medicine);
+                        }
+
+                        adapter.setMyItems(activeList);
                         adapter.notifyDataSetChanged();
+                        /*
+                        for (DocumentChange doc : value.getDocumentChanges()) {
 
-                        // String username = doc.getDocument().getString("name");
-                        // Log.d("TAG", "name : "+username);
+
+
+                            if (doc.getType() == DocumentChange.Type.ADDED) {
+                                Medicine model = doc.getDocument().toObject(Medicine.class);
+                                activeList.add(model);
+                                adapter.notifyDataSetChanged();
+
+                                // String username = doc.getDocument().getString("name");
+                                // Log.d("TAG", "name : "+username);
+                            }
+                        }*/
                     }
-                }
-            }
-        });
+                });
 
 
         // active list
 
         // inactive list
         inactiveList = new ArrayList<>();
-        inactiveList.add(new Medicine( "second ", "6"));
-        inactiveList.add(new Medicine( "second ", "6"));
+        inactiveList.add(new Medicine("second ", "6"));
+        inactiveList.add(new Medicine("second ", "6"));
 
 
         MedicationRecycleViewAdapter adapter1 = new MedicationRecycleViewAdapter(this, inactiveList);
@@ -130,11 +150,14 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
     }
 
     @Override
-    public void onClick(Medicine model , int position) {
+    public void onClick(Medicine model, int position) {
         // move to datails fragment
         // you have the model here
 
-        startActivity(new Intent(getActivity().getApplicationContext(), MedicationDrugScreen.class));
+        Intent intent = new Intent(getActivity().getApplicationContext(), MedicationDrugScreen.class);
+        intent.putExtra("obj", model);
+        startActivity(intent);
+
         Toast.makeText(getContext(), "onClick : " + position + " name " + model.getMedName(), Toast.LENGTH_SHORT).show();
     }
 }

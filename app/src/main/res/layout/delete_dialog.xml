@@ -7,7 +7,7 @@
     android:padding="20dp">
 
     <TextView
-        android:id="@+id/name_tx_id"
+        android:id="@+id/name_delete_dialog_tx_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher_foreground"
@@ -26,7 +26,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_tx_id" />
+        app:layout_constraintTop_toBottomOf="@id/name_delete_dialog_tx_id" />
 
 
     <LinearLayout

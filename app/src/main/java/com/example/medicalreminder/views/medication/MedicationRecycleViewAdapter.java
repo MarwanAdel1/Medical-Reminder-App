@@ -26,6 +26,10 @@ public class MedicationRecycleViewAdapter extends RecyclerView.Adapter<Medicatio
         this.listener = listener ;
     }
 
+    public void setMyItems(ArrayList<Medicine> myItems) {
+        this.myItems = myItems;
+    }
+
     @NonNull
     @Override
     public MedicationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
