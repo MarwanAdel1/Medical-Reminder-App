@@ -1,0 +1,7 @@
+package com.example.medicalreminder.screens.add_medication_screen.view;
+
+import com.example.medicalreminder.pojo.Medicine;
+
+public interface AddMedicineViewInterface {
+    public void addMedicineToFirebaseFirestore(Medicine medicine);
+}

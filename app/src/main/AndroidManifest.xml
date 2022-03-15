@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicalReminder">
-        <activity android:name=".views.StartSplashScreen"
+        <activity android:name=".screens.StartSplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,27 +20,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity android:name=".views.signup_screen.Registeration"
+         <activity android:name=".screens.signup_screen.Registeration"
              android:exported="true">
         <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
          </activity>
-        <activity android:name=".views.login_screen.LoginScreen">
+        <activity android:name=".screens.login_screen.LoginScreen">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name=".views.medication_drug_screen.EditMedicationDrugScreen" />
-        <activity android:name=".views.medication_drug_screen.MedicationDrugScreen" />
-        <activity android:name=".views.SplashScreen"
+        <activity android:name=".screens.medication_drug_edit_screen.view.EditMedicationDrugScreen" />
+        <activity android:name=".screens.medication_drug_display_screen.view.MedicationDrugScreen" />
+        <activity android:name=".screens.SplashScreen"
             android:theme="@style/bottomNavigationBar"></activity>
-        <activity android:name=".views.add_dependent_screen.DependentActivity" />
-        <activity android:name=".views.addmedfriend.MedfriendActivity" />
-        <activity android:name=".views.add_medication_screen.view.AddMedicationActivityScreen">
+        <activity android:name=".screens.add_dependent_screen.DependentActivity" />
+        <activity android:name=".screens.addmedfriend.MedfriendActivity" />
+        <activity android:name=".screens.add_medication_screen.view.AddMedicationActivityScreen">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -49,7 +49,7 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".screens.MainActivity">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -59,7 +59,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".views.TabBar"
+            android:name=".screens.TabBar"
             android:exported="true"></activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>

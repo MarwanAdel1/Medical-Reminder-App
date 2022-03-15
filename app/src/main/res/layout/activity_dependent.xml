@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.add_dependent_screen.DependentActivity">
+    tools:context=".screens.add_dependent_screen.DependentActivity">
 
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.medicalreminder.views.add_dependent_screen.AddDependentFragment"
+        android:name="com.example.medicalreminder.screens.add_dependent_screen.AddDependentFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_add_dependent" />

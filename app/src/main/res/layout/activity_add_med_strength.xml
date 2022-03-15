@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/addMedicationBackgroundColor"
-    tools:context=".views.add_medication_screen.view.fragments.AddMedNameFragment">
+    tools:context=".screens.add_medication_screen.view.fragments.AddMedNameFragment">
 
     <ImageView
         android:id="@+id/close_img_id"
@@ -77,6 +77,16 @@
                 android:inputType="number"
                 android:textColorHint="@color/addMedicationBackgroundColor" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/error_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The Field mustn't be blank!!"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/text_input_layout_id"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_id" />
 
         <Spinner
             android:id="@+id/spinner"

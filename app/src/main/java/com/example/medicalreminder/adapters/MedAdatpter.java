@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.views.add_medication_screen.view.AdapterClickListener;
-import com.example.medicalreminder.views.add_medication_screen.view.fragments.AddMedFormFragment;
+import com.example.medicalreminder.screens.add_medication_screen.view.AdapterClickListener;
+import com.example.medicalreminder.screens.add_medication_screen.view.fragments.AddMedFormFragment;
 
 public class MedAdatpter extends RecyclerView.Adapter<MedAdatpter.ViewHolder> {
     private AddMedFormFragment addMedFormFragment;
