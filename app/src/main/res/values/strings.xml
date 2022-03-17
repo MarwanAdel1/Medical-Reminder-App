@@ -14,4 +14,10 @@
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+    <string name="edite_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="Phone">Phone</string>
+    <string name="dateOfBirth">Date Of Birth</string>
 </resources>

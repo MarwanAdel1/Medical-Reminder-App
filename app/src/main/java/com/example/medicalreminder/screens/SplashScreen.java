@@ -1,6 +1,7 @@
 package com.example.medicalreminder.screens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -56,6 +57,8 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 firebaseAuth.signOut();
+                SharedPreferences userFile = getSharedPreferences("user_file",MODE_PRIVATE);
+                userFile.edit().clear().apply();
                 startActivity(new Intent(SplashScreen.this, LoginScreen.class));
             }
         });
@@ -90,8 +93,7 @@ public class SplashScreen extends AppCompatActivity {
                                 diseases.add(row[1].getContents());
                             }
                         }
-                        Intent intent = new Intent(SplashScreen.this, TabBar.class);
-                        startActivity(intent);
+                        startActivity(new Intent(SplashScreen.this, TabBar.class));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (BiffException e) {

@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicalReminder">
-        <activity android:name=".screens.StartSplashScreen"
+        <activity
+            android:name=".screens.user_profile.Profile"
+            android:exported="false" />
+        <activity
+            android:name=".screens.StartSplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,24 +23,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity android:name=".screens.signup_screen.Registeration"
-             android:exported="true">
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-         </activity>
+        <activity
+            android:name=".screens.signup_screen.Registeration"
+            android:exported="true">
+        </activity>
         <activity android:name=".screens.login_screen.LoginScreen">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
         <activity android:name=".screens.medication_drug_edit_screen.view.EditMedicationDrugScreen" />
         <activity android:name=".screens.medication_drug_display_screen.view.MedicationDrugScreen" />
-        <activity android:name=".screens.SplashScreen"
-            android:theme="@style/bottomNavigationBar"></activity>
+        <activity
+            android:name=".screens.SplashScreen"
+            android:theme="@style/bottomNavigationBar" />
         <activity android:name=".screens.add_dependent_screen.DependentActivity" />
         <activity android:name=".screens.addmedfriend.MedfriendActivity" />
         <activity android:name=".screens.add_medication_screen.view.AddMedicationActivityScreen">
@@ -60,9 +56,14 @@
         </activity>
         <activity
             android:name=".screens.TabBar"
-            android:exported="true"></activity>
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
     </application>
 
 </manifest>

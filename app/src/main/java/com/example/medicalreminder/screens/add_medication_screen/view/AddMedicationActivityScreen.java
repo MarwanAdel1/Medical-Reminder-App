@@ -40,7 +40,7 @@ public class AddMedicationActivityScreen extends AppCompatActivity implements Ad
 
         fragmentManager.beginTransaction().add(R.id.FragmentContainerView, medicineFragment[currentFragment]).commit();
 
-        addMedicinePresenterInterface = new AddMedicinePresenter(this,);
+        addMedicinePresenterInterface = new AddMedicinePresenter(this);
 
     }
 

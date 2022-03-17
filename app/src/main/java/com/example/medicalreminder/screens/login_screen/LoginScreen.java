@@ -31,6 +31,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -42,17 +47,17 @@ public class LoginScreen extends AppCompatActivity {
     ImageView twitter_img;
     ImageView google_img;
     ImageView fb_img;
-
     public static final int RC_SIGN_IN = 123;
-
+    SharedPreferences userData ;
     //              Firebase element
     FirebaseAuth firebaseAuth;
+    //              Firebase database object to access firebase's realtime database.
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
     //              Login with google
     private GoogleSignInClient mGoogleSignInClient;
     //              Login with facebook
     private CallbackManager mCallbackManager;
-//    private AccessTokenTracker accessTokenTracker;
-//    FirebaseAuth.AuthStateListener authListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,9 @@ public class LoginScreen extends AppCompatActivity {
 
         //          Firebase initialization
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // shared preference file
+        userData = getSharedPreferences("user_file", MODE_PRIVATE);
 
         //              Handling buttons
         login_button.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +111,7 @@ public class LoginScreen extends AppCompatActivity {
                 //          for login with facebook
             }
         });
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+//        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
     }
 
     private void initUi() {
@@ -118,7 +126,7 @@ public class LoginScreen extends AppCompatActivity {
 
 //------------------------------------------------------ Start of default Login (By email, password) --------------------------------
     private void loginUser() {
-        String email = email_field.getText().toString();
+        String email = email_field.getText().toString().replace('.','*');
         String password = password_field.getText().toString();
         if (TextUtils.isEmpty(email)) {
             email_field.setError("Email can not be empty");
@@ -128,18 +136,44 @@ public class LoginScreen extends AppCompatActivity {
                 password_field.setError("Password can not be empty");
                 password_field.requestFocus();
             } else {
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //          if user registration created successfully
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginScreen.this, "Logged in SUCCESSFULLY", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginScreen.this, SplashScreen.class);
-                            startActivity(intent);
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        //  Check if email is existing in the firebase realtime database
+                        if (snapshot.hasChild(email)) {
+                            //  Email is existed in the firebase realtime database
+                            //  retrieve password of this user from firebase realtime database and compare it with the existed one in database
+                            final String getPassword = snapshot.child(email).child("password").getValue(String.class);
+                            if (getPassword.equals(password)) {
+                                firebaseAuth.signInWithEmailAndPassword(email.replace('*','.'), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    //          if user registration created successfully
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(LoginScreen.this, " Successfully Logged in", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginScreen.this, "email: " + email, Toast.LENGTH_SHORT).show();
+                                        SharedPreferences.Editor editor = userData.edit();
+                                        editor.putString("email",email);
+                                        editor.putString("name",snapshot.child(email).child("name").getValue(String.class));
+                                        editor.putString("phone",snapshot.child(email).child("phone").getValue(String.class));
+                                        editor.putString("dateOfBirth",snapshot.child(email).child("date of birth").getValue(String.class));
+                                        editor.commit();
+                                        startActivity(new Intent(LoginScreen.this, SplashScreen.class));
+                                    } else {
+                                        Toast.makeText(LoginScreen.this, "Login Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            } else {
+                                Toast.makeText(LoginScreen.this, "Wrong password", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(LoginScreen.this, "Login Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginScreen.this, "Wrong email", Toast.LENGTH_SHORT).show();
                         }
                     }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
             }
         }
@@ -176,13 +210,12 @@ public class LoginScreen extends AppCompatActivity {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
                     firebaseAuthWithGoogle(account.getIdToken());
-                    SharedPreferences.Editor editor = getApplicationContext()
-                            .getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                            .edit();
-                    editor.putString("username", account.getDisplayName());
-                    editor.putString("email", account.getEmail());
-                    editor.apply();
-
+                    SharedPreferences.Editor editor = userData.edit();
+                    editor.putString("name",account.getDisplayName());
+                    editor.putString("email",account.getEmail());
+                    editor.putString("phone","No phone number exist");
+                    editor.putString("dateOfBirth","No Date of birth exist");
+                    editor.commit();
                 } catch (ApiException e) {
                     // Google Sign In failed, update UI appropriately
                     Log.w("TAG", "Google sign in failed: " + e.getMessage(), e);

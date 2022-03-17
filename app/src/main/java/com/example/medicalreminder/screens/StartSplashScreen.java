@@ -9,6 +9,7 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.screens.login_screen.LoginScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class StartSplashScreen extends AppCompatActivity {
 
@@ -19,8 +20,8 @@ public class StartSplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setContentView(R.layout.activity_start_splash_screen);
-//        logout_button = findViewById(R.id.logout_btn);
 
         //      Initialize firebaseAuth
         firebaseAuth = FirebaseAuth.getInstance();

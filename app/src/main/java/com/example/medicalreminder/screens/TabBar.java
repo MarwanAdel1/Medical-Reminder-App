@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +27,15 @@ import com.example.medicalreminder.screens.add_dependent_screen.AddDependentFrag
 import com.example.medicalreminder.screens.add_dependent_screen.DependentActivity;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.screens.addmedfriend.MedfriendActivity;
+import com.example.medicalreminder.screens.user_profile.Profile;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class TabBar extends AppCompatActivity {
 
@@ -37,14 +44,17 @@ public class TabBar extends AppCompatActivity {
     TextView profile_name;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    TextView navUsername;
     Toolbar toolbar;
+    ActionBar actionBar;
     ExtendedFloatingActionButton add_medication_button;
     ExtendedFloatingActionButton add_dose_button;
     ExtendedFloatingActionButton add_health_tracker_button;
     boolean addBtnClicked = false;
-    Intent getIntent;
-
-
+    SharedPreferences readUserData;
+//    Intent getIntent;
+    //              Firebase database object to access firebase's realtime database.
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
     @SuppressLint("ResourceType")
     @Override
@@ -52,11 +62,11 @@ public class TabBar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
 
-        //         get user data from shared preferences after login with facebook
-        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String name = preferences.getString("username","No name existing");
+        //         get user data from shared preferences after login
+        readUserData = getSharedPreferences("user_file", MODE_PRIVATE);
 
-        //getIntent = getIntent();
+
+//        getIntent = getIntent();
 
         //      UI References
         tab = findViewById(R.id.buttom_tab_layout);
@@ -70,8 +80,10 @@ public class TabBar extends AppCompatActivity {
         profile_name = findViewById(R.id.profile_name);
         //          to set profile name of the user
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.profile_name);
-        navUsername.setText(name);
+        navUsername = (TextView) headerView.findViewById(R.id.profile_name);
+//        navUsername.setText(readUserData.getString("name", "No Name Exist"));
+        ImageView navUserImage = (ImageView) headerView.findViewById(R.id.profile_img);
+        TextView navEditeProfile = (TextView) headerView.findViewById(R.id.edit_profile);
 
 //----------------------------------- Start of Handling Extended floating action buttons-----------------------------------------------
 
@@ -106,18 +118,38 @@ public class TabBar extends AppCompatActivity {
             }
         });
 
+        navEditeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TabBar.this, Profile.class));
+            }
+        });
+
 //----------------------------------- End of Handling Extended floating action buttons-----------------------------------------------
 
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         // methods to display the icon in the ActionBar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_account_circle_24);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setSubtitle(name);
         actionBar.setTitle("");
         setListeners();
+
+        databaseReference.child(readUserData.getString("email","")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                actionBar.setSubtitle(snapshot.child("name").getValue(String.class));
+                System.out.println("value: " + snapshot.child("name").getValue(String.class));
+                navUsername.setText(snapshot.child("name").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
 
@@ -143,7 +175,25 @@ public class TabBar extends AppCompatActivity {
 // -------------------------------------------- End of Tab Layout (Home, Medication, Settings)---------------------
     }
 
-//----------------------------------------------- Start of Action Bar -----------------------------------------------------------
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        databaseReference.child(readUserData.getString("email","")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                actionBar.setSubtitle(snapshot.child("name").getValue(String.class));
+                System.out.println("value: " + snapshot.child("name").getValue(String.class));
+                navUsername.setText(snapshot.child("name").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    //----------------------------------------------- Start of Action Bar -----------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
