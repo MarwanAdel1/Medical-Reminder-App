@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens;
+package com.example.medicalreminder.screens.home_screen;
 
 import android.os.Bundle;
 

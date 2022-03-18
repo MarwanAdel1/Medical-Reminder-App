@@ -109,9 +109,9 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(LoginScreen.this, "Login using facebook", Toast.LENGTH_SHORT).show();
                 //          for login with facebook
+                startActivity(new Intent(LoginScreen.this, Login_fb.class));
             }
         });
-//        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
     }
 
     private void initUi() {
@@ -154,9 +154,9 @@ public class LoginScreen extends AppCompatActivity {
                                         Toast.makeText(LoginScreen.this, "email: " + email, Toast.LENGTH_SHORT).show();
                                         SharedPreferences.Editor editor = userData.edit();
                                         editor.putString("email",email);
-                                        editor.putString("name",snapshot.child(email).child("name").getValue(String.class));
-                                        editor.putString("phone",snapshot.child(email).child("phone").getValue(String.class));
-                                        editor.putString("dateOfBirth",snapshot.child(email).child("date of birth").getValue(String.class));
+//                                        editor.putString("name",snapshot.child(email).child("name").getValue(String.class));
+//                                        editor.putString("phone",snapshot.child(email).child("phone").getValue(String.class));
+//                                        editor.putString("dateOfBirth",snapshot.child(email).child("date of birth").getValue(String.class));
                                         editor.commit();
                                         startActivity(new Intent(LoginScreen.this, SplashScreen.class));
                                     } else {
@@ -210,11 +210,28 @@ public class LoginScreen extends AppCompatActivity {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
                     firebaseAuthWithGoogle(account.getIdToken());
+
+                    //  to check if the email already existed in firebase realtime database
+                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.hasChild(account.getEmail().replace('.','*'))) {
+                                //  sending data to firebase realtime database
+                                databaseReference.child("users").child(account.getEmail().replace('.','*')).child("name").setValue(account.getDisplayName());
+                                databaseReference.child("users").child(account.getEmail().replace('.','*')).child("phone").setValue("");
+                                databaseReference.child("users").child(account.getEmail().replace('.','*')).child("password").setValue("");
+                                databaseReference.child("users").child(account.getEmail().replace('.','*')).child("date of birth").setValue("");
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
+
                     SharedPreferences.Editor editor = userData.edit();
-                    editor.putString("name",account.getDisplayName());
-                    editor.putString("email",account.getEmail());
-                    editor.putString("phone","No phone number exist");
-                    editor.putString("dateOfBirth","No Date of birth exist");
+//                    editor.putString("name",account.getDisplayName());
+                    editor.putString("email",account.getEmail().replace('.','*'));
+//                    editor.putString("phone","No phone number exist");
+//                    editor.putString("dateOfBirth","No Date of birth exist");
                     editor.commit();
                 } catch (ApiException e) {
                     // Google Sign In failed, update UI appropriately

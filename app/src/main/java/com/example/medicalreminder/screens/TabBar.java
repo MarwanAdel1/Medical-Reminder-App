@@ -27,6 +27,7 @@ import com.example.medicalreminder.screens.add_dependent_screen.AddDependentFrag
 import com.example.medicalreminder.screens.add_dependent_screen.DependentActivity;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.screens.addmedfriend.MedfriendActivity;
+import com.example.medicalreminder.screens.home_screen.HomeFragment;
 import com.example.medicalreminder.screens.user_profile.Profile;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -137,20 +138,25 @@ public class TabBar extends AppCompatActivity {
         actionBar.setTitle("");
         setListeners();
 
-        databaseReference.child(readUserData.getString("email","")).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                actionBar.setSubtitle(snapshot.child("name").getValue(String.class));
-                System.out.println("value: " + snapshot.child("name").getValue(String.class));
-                navUsername.setText(snapshot.child("name").getValue(String.class));
-            }
+        if(!databaseReference.child(readUserData.getString("email","")).equals("")) {
+            databaseReference.child(readUserData.getString("email", "")).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    actionBar.setSubtitle(snapshot.child("name").getValue(String.class));
+                    System.out.println("value: " + snapshot.child("name").getValue(String.class));
+                    navUsername.setText(snapshot.child("name").getValue(String.class));
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
+                }
+            });
+        }
+        else{
+            actionBar.setSubtitle(readUserData.getString("name","no name"));
+            navUsername.setText(readUserData.getString("name","no name"));
+        }
 
 
 // -------------------------------------------- Start of Tab Layout (Home, Medication, Settings)---------------------
