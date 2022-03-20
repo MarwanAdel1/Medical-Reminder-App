@@ -1,12 +1,10 @@
 package com.example.medicalreminder.screens;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.screens.login_screen.LoginScreen;
+import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -14,8 +12,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class StartSplashScreen extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-//    Button logout_button;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +28,7 @@ public class StartSplashScreen extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user == null){
-            startActivity(new Intent(StartSplashScreen.this, LoginScreen.class));
+            startActivity(new Intent(StartSplashScreen.this, LoginScreenActivity.class));
         }
         else {
             startActivity(new Intent(StartSplashScreen.this, TabBar.class));

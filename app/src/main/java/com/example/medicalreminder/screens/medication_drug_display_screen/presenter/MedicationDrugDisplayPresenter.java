@@ -1,15 +1,13 @@
 package com.example.medicalreminder.screens.medication_drug_display_screen.presenter;
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import com.example.medicalreminder.model.MedicineRepoInterface;
-import com.example.medicalreminder.pojo.Medicine;
+import com.example.medicalreminder.pojo.MedicineNotification;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import java.util.List;
 
 public class MedicationDrugDisplayPresenter implements MedicationDrugDisplayPresenterInterface {
     private MedicationDrugDispalyViewInterface medicationDrugDispalyViewInterface;
@@ -21,7 +19,17 @@ public class MedicationDrugDisplayPresenter implements MedicationDrugDisplayPres
     }
 
     @Override
-    public void deleteThisMedicine(String medName) {
-        medicineRepoInterface.deleteMedicine(medName,medicationDrugDispalyViewInterface);
+    public void deleteThisMedicine(String medName, MedicineNotification medicineNotification) {
+        medicineRepoInterface.deleteMedicine(medName, medicineNotification, medicationDrugDispalyViewInterface);
+    }
+
+    @Override
+    public void getTodayNotification(String date, LifecycleOwner lifecycleOwner) {
+        medicineRepoInterface.getTodayNotificationFromRoom(date).observe(lifecycleOwner, new Observer<List<MedicineNotification>>() {
+            @Override
+            public void onChanged(List<MedicineNotification> medicineNotifications) {
+                medicationDrugDispalyViewInterface.notifyAddFromDatabase(medicineNotifications);
+            }
+        });
     }
 }

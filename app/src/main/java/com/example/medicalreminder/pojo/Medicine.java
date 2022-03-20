@@ -1,6 +1,8 @@
 package com.example.medicalreminder.pojo;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 public class Medicine implements Serializable {
     private String medName;
@@ -11,12 +13,41 @@ public class Medicine implements Serializable {
     private int medRepeatingFrequency;  /// 0 for only as needed , 1 for yes ,2 for no /// repeated
     private int medRepeatingPerDay;
     private int medRepeatingPerWeek;
-    
-    public Medicine( String medName , String medForm){
+    private int medNumberOfPillsPerDose;
+    private String startDate;
+    private Map<String,List<DoseTime>> medTimeDosesPerDay;
+
+
+
+    public  Medicine(){}
+    public Medicine(String medName , String medForm){
         this.medName = medName ;
         this.medForm = medForm ;
     }
-    public  Medicine(){}
+
+    public Map<String, List<DoseTime>> getMedTimeDosesPerDay() {
+        return medTimeDosesPerDay;
+    }
+
+    public void setMedTimeDosesPerDay(Map<String, List<DoseTime>> medTimeDosesPerDay) {
+        this.medTimeDosesPerDay = medTimeDosesPerDay;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public int getMedNumberOfPillsPerDose() {
+        return medNumberOfPillsPerDose;
+    }
+
+    public void setMedNumberOfPillsPerDose(int medNumberOfPillsPerDose) {
+        this.medNumberOfPillsPerDose = medNumberOfPillsPerDose;
+    }
 
     public int getMedRepeatingPerDay() {
         return medRepeatingPerDay;

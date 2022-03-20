@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@color/white"
-                android:hint="Medication name"
+                android:hint="Medication strength"
                 android:inputType="number"
                 android:textColorHint="@color/addMedicationBackgroundColor" />
         </com.google.android.material.textfield.TextInputLayout>

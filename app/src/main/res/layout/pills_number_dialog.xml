@@ -1,0 +1,55 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/gray"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+
+    <EditText
+        android:id="@+id/number"
+        android:layout_width="118dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="5dp"
+        android:text="0"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/number">
+
+        <Button
+            android:id="@+id/cancel_dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="@android:color/transparent"
+            android:text="Cancel"
+            android:textColor="@color/addMedicationBackgroundColorDark" />
+
+        <Button
+            android:id="@+id/set_dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="@android:color/transparent"
+            android:text="Set"
+            android:textColor="@color/addMedicationBackgroundColorDark" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

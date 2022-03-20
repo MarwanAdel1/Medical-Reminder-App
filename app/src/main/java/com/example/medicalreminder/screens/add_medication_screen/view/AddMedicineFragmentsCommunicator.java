@@ -18,11 +18,16 @@ public interface AddMedicineFragmentsCommunicator {
 
     public void setMedReason(String reason);
 
-    public void setMedNumberOfRepeatingPerday();
+    public void setMedNumberOfRepeatingPerday(int numberOfPills,int hour, int minutes);
 
     public void setMedRepeatingPeriod(int choice, Medicine medicine);
 
     public void backFragment();
 
     public void backToPreviousActivity();
+
+    public void sendTimePeriod(String timePeriod);
+
+    public void setStartDate(int day,int month,int year);
+
 }

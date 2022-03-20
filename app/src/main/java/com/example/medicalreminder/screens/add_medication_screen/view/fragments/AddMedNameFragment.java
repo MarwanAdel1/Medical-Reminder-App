@@ -15,10 +15,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.pojo.MedicineNotification;
 import com.example.medicalreminder.screens.SplashScreen;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
 
+import java.util.List;
+
 public class AddMedNameFragment extends Fragment {
+    private List<MedicineNotification> med;
+
     private AutoCompleteTextView medAutoCompleteTextView;
     private Button toFormBt;
     private ImageView backImg;
@@ -76,5 +81,4 @@ public class AddMedNameFragment extends Fragment {
         errorTx.setVisibility(View.INVISIBLE);
 
     }
-
 }

@@ -25,7 +25,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -116,21 +115,6 @@ public class MedicineFragment extends Fragment implements OnMedClickListener {
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-                        /*
-                        for (DocumentChange doc : value.getDocumentChanges()) {
-
-
-
-                            if (doc.getType() == DocumentChange.Type.ADDED) {
-                                Medicine model = doc.getDocument().toObject(Medicine.class);
-                                activeList.add(model);
-                                adapter.notifyDataSetChanged();
-
-                                // String username = doc.getDocument().getString("name");
-                                // Log.d("TAG", "name : "+username);
-                            }
-                        }*/
 
 
         // active list

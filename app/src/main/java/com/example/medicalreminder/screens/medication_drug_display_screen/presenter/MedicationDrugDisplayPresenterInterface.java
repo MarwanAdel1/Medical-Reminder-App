@@ -1,8 +1,10 @@
 package com.example.medicalreminder.screens.medication_drug_display_screen.presenter;
 
-import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
+import androidx.lifecycle.LifecycleOwner;
+
+import com.example.medicalreminder.pojo.MedicineNotification;
 
 public interface MedicationDrugDisplayPresenterInterface {
-    public void deleteThisMedicine(String medName);
+    public void deleteThisMedicine(String medName, MedicineNotification medicineNotification);
+    public void getTodayNotification(String date, LifecycleOwner lifecycleOwner);
 }

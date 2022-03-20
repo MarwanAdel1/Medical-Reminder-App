@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.screens.add_medication_screen.view.fragments.AddMedNameFragment;
-import com.example.medicalreminder.screens.login_screen.LoginScreen;
+import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -59,7 +59,7 @@ public class SplashScreen extends AppCompatActivity {
                 firebaseAuth.signOut();
                 SharedPreferences userFile = getSharedPreferences("user_file",MODE_PRIVATE);
                 userFile.edit().clear().apply();
-                startActivity(new Intent(SplashScreen.this, LoginScreen.class));
+                startActivity(new Intent(SplashScreen.this, LoginScreenActivity.class));
             }
         });
 

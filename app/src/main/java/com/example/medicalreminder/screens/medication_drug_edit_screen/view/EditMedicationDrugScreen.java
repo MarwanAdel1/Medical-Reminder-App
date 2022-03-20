@@ -10,8 +10,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.local_data.room_database.DatabaseAccess;
 import com.example.medicalreminder.model.MedicineRepo;
-import com.example.medicalreminder.network_data.Firebase;
+import com.example.medicalreminder.network_data.FirebaseAccess;
 import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugScreen;
 import com.example.medicalreminder.screens.medication_drug_edit_screen.presenter.EditMedicationDrugPresenter;
@@ -27,7 +28,7 @@ public class EditMedicationDrugScreen extends AppCompatActivity implements EditM
     private ImageView closeImg;
 
     private EditMedicationDrugPresenterInterface editMedicationDrugPresenterInterface;
-
+    private Medicine medicine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class EditMedicationDrugScreen extends AppCompatActivity implements EditM
         setContentView(R.layout.activity_edit_medication_drug_screen);
 
 
-        Medicine medicine = (Medicine) getIntent().getSerializableExtra("obj");
+        medicine = (Medicine) getIntent().getSerializableExtra("obj");
         doneEditTx = findViewById(R.id.done_tx_id);
         medNameEt = findViewById(R.id.med_name_edit_et);
         medStrengthEt = findViewById(R.id.med_strength_edit_et);
@@ -45,8 +46,7 @@ public class EditMedicationDrugScreen extends AppCompatActivity implements EditM
         medNameEt.setText(medicine.getMedName());
         medStrengthEt.setText(String.valueOf(medicine.getMedStrength()));
 
-
-        editMedicationDrugPresenterInterface = new EditMedicationDrugPresenter(this, MedicineRepo.getInstance(this, Firebase.getInstance()));
+        editMedicationDrugPresenterInterface = new EditMedicationDrugPresenter(this, MedicineRepo.getInstance(this, FirebaseAccess.getInstance(), DatabaseAccess.getInstance(this)));
 
         doneEditTx.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +76,7 @@ public class EditMedicationDrugScreen extends AppCompatActivity implements EditM
         map.put("medName", medNameEt.getText().toString());
         map.put("medStrength", Double.parseDouble(medStrengthEt.getText().toString()));
 
-        editMedicationDrugPresenterInterface.editThisMedicine(medName,map);
+        editMedicationDrugPresenterInterface.editThisMedicine(medName, map);
     }
 
     @Override

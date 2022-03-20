@@ -1,11 +1,6 @@
-package com.example.medicalreminder.screens.signup_screen;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.medicalreminder.screens.signup_screen.view;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,21 +11,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.screens.login_screen.LoginScreen;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.medicalreminder.model.RegisterationRepo;
+import com.example.medicalreminder.network_data.FirebaseAccess;
+import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
+import com.example.medicalreminder.screens.signup_screen.presenter.RegisterationPresenter;
+import com.example.medicalreminder.screens.signup_screen.presenter.RegisterationPresenterInterface;
 
-public class Registeration extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-
+public class RegisterationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, RegisterationActivityInterface{
     Spinner month_spinner;
     TextView login;
     EditText email_field;
@@ -44,12 +33,9 @@ public class Registeration extends AppCompatActivity implements AdapterView.OnIt
     String[] months = {"Month", "January", "February","March", "April","May", "June",
             "July", "August","September", "October","November", "December"};
     String month = months[0];
-    //              Firebase database object to access firebase's realtime database.
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
-    //          Firebase elements
-    FirebaseAuth firebaseAuth;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    private RegisterationPresenterInterface presenterInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,17 +44,13 @@ public class Registeration extends AppCompatActivity implements AdapterView.OnIt
         month_spinner.setOnItemSelectedListener(this);
         ArrayAdapter monthAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, months);
         month_spinner.setAdapter(monthAdapter);
-//        month_spinner.setSelection(0);
 
-        // ----------------------------------------------- Firebase initialization ----------------------------------------------------------------
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        // -----------------------------------------------  Handle buttons ------------------------------------------------------------------------
+        presenterInterface = new RegisterationPresenter(this, RegisterationRepo.getInstance(this, FirebaseAccess.getInstance()));
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Registeration.this, LoginScreen.class));
+                startActivity(new Intent(RegisterationActivity.this, LoginScreenActivity.class));
             }
         });
         signup_button.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +69,7 @@ public class Registeration extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {}
 
-    private void createUser(){
+     public void createUser(){
         String email = email_field.getText().toString().replace('.','*');
         String phone = phone_field.getText().toString();
         String name = name_field.getText().toString();
@@ -131,38 +113,9 @@ public class Registeration extends AppCompatActivity implements AdapterView.OnIt
                                         if(!password.equals(confirm_password)){
                                             Toast.makeText(this, "Password and Confirm password must matched", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            //  to check if the email already existed in firebase realtie database
-                                            databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if (snapshot.hasChild(email)) {
-                                                        Toast.makeText(Registeration.this, "This email already existed", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        //  sending data to firebase realtime database
-                                                        databaseReference.child("users").child(email).child("name").setValue(name);
-                                                        databaseReference.child("users").child(email).child("phone").setValue(phone);
-                                                        databaseReference.child("users").child(email).child("password").setValue(password);
-                                                        databaseReference.child("users").child(email).child("date of birth").setValue(year + "/" + month + "/" + day);
-                                                        firebaseAuth.createUserWithEmailAndPassword(email.replace('*','.'), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                                            //          if user registration created successfully
-                                                            if(task.isSuccessful()){
-                                                                Toast.makeText(Registeration.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                                                startActivity(new Intent(Registeration.this,LoginScreen.class));
-                                                            } else{
-                                                                Toast.makeText(Registeration.this, "Registration Error Ocuured ", Toast.LENGTH_SHORT).show();
-                                                                System.out.println("Error Occured in Login: " + task.getException().getMessage());
-                                                            }
-                                                        }
-                                                    });
-                                                    }
-                                                }
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
 
-                                                }
-                                            });
+                                                presenterInterface.sendUserData(email,name,phone,password,year,month,day,this);
+                                            };
                                         }
                                     }
                                 }
@@ -173,6 +126,15 @@ public class Registeration extends AppCompatActivity implements AdapterView.OnIt
             }
         }
 
+    @Override
+    public void registerationOnSuccess() {
+        Toast.makeText(RegisterationActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(RegisterationActivity.this, LoginScreenActivity.class));
+    }
+
+    @Override
+    public void registerationOnFailure(String message) {
+        Toast.makeText(RegisterationActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void initUI(){

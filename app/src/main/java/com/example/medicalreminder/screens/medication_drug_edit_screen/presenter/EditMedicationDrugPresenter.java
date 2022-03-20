@@ -2,9 +2,6 @@ package com.example.medicalreminder.screens.medication_drug_edit_screen.presente
 
 import com.example.medicalreminder.model.MedicineRepoInterface;
 import com.example.medicalreminder.screens.medication_drug_edit_screen.view.EditMedicationDrugViewInterface;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.Map;
 
