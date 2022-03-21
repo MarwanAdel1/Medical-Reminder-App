@@ -27,4 +27,12 @@ public class LocalLoginUserData implements LocalLoginUserDataInterface{
         editor.putString("email",email);
         editor.commit();
     }
+
+    public String getUserEmail(){
+        return userData.getString("email", "no email");
+    }
+
+    public void deleteEmail(){
+        userData.edit().clear().apply();
+    }
 }

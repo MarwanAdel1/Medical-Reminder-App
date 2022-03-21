@@ -6,8 +6,10 @@ import android.content.Intent;
 
 import com.example.medicalreminder.local_data.LocalLoginUserData;
 import com.example.medicalreminder.network_data.FirebaseAccessInterface;
+import com.example.medicalreminder.screens.home_screen.view.HomeActivityInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivityInterface;
 import com.example.medicalreminder.screens.signup_screen.view.RegisterationActivityInterface;
+import com.example.medicalreminder.screens.user_profile.view.UserProfileActivityInterface;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 public class RegisterationRepo implements RegisterationRepoInterface{
@@ -60,5 +62,27 @@ public class RegisterationRepo implements RegisterationRepoInterface{
 
     public void finalpartOfGoogleLogin(Intent data , LoginScreenActivityInterface loginInterface, Activity activity){
         firebaseInterface.googleLogin(data, loginInterface, activity, localData);
+    }
+
+    public String getUserEmail(){
+        return localData.getUserEmail();
+    }
+
+    public void getUserData(String email, UserProfileActivityInterface activityInterface){
+        firebaseInterface.getUserData(email, activityInterface);
+    }
+
+    public void saveUserdataAfterEditing(String email, String name, String phone, String dateOfBirth, UserProfileActivityInterface activityInterface){
+        firebaseInterface.saveUserdataAfterEditing(email,name,phone,dateOfBirth,activityInterface);
+    }
+
+    @Override
+    public void getUserName(HomeActivityInterface activityInterface) {
+        firebaseInterface.getUserName(localData.getUserEmail(), activityInterface);
+    }
+
+    public void logout(){
+        localData.deleteEmail();
+        firebaseInterface.logout();
     }
 }

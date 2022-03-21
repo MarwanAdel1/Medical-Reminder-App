@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicalReminder">
-        <activity android:name=".screens.user_profile.Profile"
+        <activity android:name=".screens.user_profile.view.UserProfileActivity"
             android:exported="false" />
         <activity android:name=".screens.StartSplashScreen"
             android:exported="true">
@@ -32,8 +32,8 @@
         <activity android:name=".screens.addmedfriend.MedfriendActivity" />
         <activity android:name=".screens.add_medication_screen.view.AddMedicationActivityScreen"/>
         <activity android:name=".screens.MainActivity"/>
-        <activity android:name=".screens.TabBar"
-            android:exported="true" />
+        <activity android:name=".screens.home_screen.view.HomeActivity"/>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

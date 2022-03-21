@@ -11,10 +11,12 @@ import com.example.medicalreminder.local_data.LocalLoginUserData;
 import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.home_screen.view.HomeActivityInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivityInterface;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
 import com.example.medicalreminder.screens.medication_drug_edit_screen.view.EditMedicationDrugViewInterface;
 import com.example.medicalreminder.screens.signup_screen.view.RegisterationActivityInterface;
+import com.example.medicalreminder.screens.user_profile.view.UserProfileActivityInterface;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,6 +37,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -166,8 +171,13 @@ public class FirebaseAccess implements FirebaseAccessInterface {
                     //  Email is existed in the firebase realtime database
                     //  retrieve password of this user from firebase realtime database and compare it with the existed one in database
                     final String getPassword = snapshot.child(email).child("password").getValue(String.class);
+                    Log.i("TAG", "get password: " + getPassword);
+                    Log.i("TAG", "password: " + password);
                     if (getPassword.equals(password)) {
-                        firebaseAuth.signInWithEmailAndPassword(email.replace('*','.'), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        Log.i("TAG", "onDataChange1: " + email);
+                        Log.i("TAG", "onDataChange2: " + email.replace('*','.'));
+                        firebaseAuth.signInWithEmailAndPassword(email.replace('*','.'), password)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 //          if user registration created successfully
@@ -255,5 +265,76 @@ public class FirebaseAccess implements FirebaseAccessInterface {
                         }
                     }
                 });
+    }
+
+    public void getUserData(String email, UserProfileActivityInterface activityInterface) {
+        JSONObject returnObject = new JSONObject();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.keepSynced(true);
+        databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String name = snapshot.child("name").getValue(String.class);
+                String phone = snapshot.child("phone").getValue(String.class);
+                String date_of_birth = snapshot.child("date of birth").getValue(String.class);
+                try {
+                    returnObject.put("name", name);
+                    returnObject.put("phone", phone);
+                    returnObject.put("dateOfBirth", date_of_birth);
+                    activityInterface.onSuccess(returnObject);
+                } catch (JSONException e) {
+                    activityInterface.onFailure("Something wrong with retrieving data");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void saveUserdataAfterEditing(String email, String name, String phone, String dateOfBirth, UserProfileActivityInterface activityInterface){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //      To save updates in firebase realtime database
+                databaseReference.child(email).child("name").setValue(name);
+                databaseReference.child(email).child("phone").setValue(phone);
+                databaseReference.child(email).child("date of birth").setValue(dateOfBirth);
+                getUserData(email,activityInterface);
+                activityInterface.onFailure("data updated successfully");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                activityInterface.onFailure("Editing data fail");
+            }
+        });
+    }
+
+    public void getUserName(String email, HomeActivityInterface activityInterface){
+        //              Firebase database object to access firebase's realtime database.
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        if(!databaseReference.child(email).equals("no email")) {
+            databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    activityInterface.onSuccess(snapshot.child("name").getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    activityInterface.onFailure("retrieving user name failed");
+                }
+            });
+        }
+        else{
+            activityInterface.onSuccess("no name");
+        }
+    }
+
+    public void logout(){
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
     }
 }

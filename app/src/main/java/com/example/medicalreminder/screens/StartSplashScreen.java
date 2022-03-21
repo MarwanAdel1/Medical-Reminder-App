@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.screens.home_screen.view.HomeActivity;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +32,7 @@ public class StartSplashScreen extends AppCompatActivity {
             startActivity(new Intent(StartSplashScreen.this, LoginScreenActivity.class));
         }
         else {
-            startActivity(new Intent(StartSplashScreen.this, TabBar.class));
+            startActivity(new Intent(StartSplashScreen.this, HomeActivity.class));
         }
         
     }

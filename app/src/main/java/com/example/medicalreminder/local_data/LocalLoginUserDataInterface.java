@@ -1,5 +1,7 @@
 package com.example.medicalreminder.local_data;
 
 public interface LocalLoginUserDataInterface {
-    public void saveUserLoginData(String email);
+    void saveUserLoginData(String email);
+    String getUserEmail();
+    void deleteEmail();
 }

@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.home_screen;
+package com.example.medicalreminder.screens.home_screen.view;
 
 import android.os.Bundle;
 
@@ -25,8 +25,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
-    private Calendar calendar = Calendar.getInstance();
-    private int currentMonth = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -65,8 +63,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        // set current date to calendar and current month to currentMonth variable
-//        WeekViewActivity weekViewActivity = new WeekViewActivity();
 
     }
 

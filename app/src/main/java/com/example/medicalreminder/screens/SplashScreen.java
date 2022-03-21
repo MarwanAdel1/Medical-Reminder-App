@@ -1,25 +1,17 @@
 package com.example.medicalreminder.screens;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.screens.add_medication_screen.view.fragments.AddMedNameFragment;
-import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.medicalreminder.screens.home_screen.view.HomeActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
 import jxl.Cell;
 import jxl.Sheet;
@@ -40,28 +32,11 @@ public class SplashScreen extends AppCompatActivity {
     private WorkbookSettings workbookSettings;
     private Workbook workbook;
 
-    FirebaseAuth firebaseAuth;
-    Button logout_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        logout_button = findViewById(R.id.logout_btn);
-
-        //      Initialize firebaseAuth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        //          Handle Buttons
-        logout_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firebaseAuth.signOut();
-                SharedPreferences userFile = getSharedPreferences("user_file",MODE_PRIVATE);
-                userFile.edit().clear().apply();
-                startActivity(new Intent(SplashScreen.this, LoginScreenActivity.class));
-            }
-        });
 
         asyncHttpClient = new AsyncHttpClient();
 
@@ -93,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
                                 diseases.add(row[1].getContents());
                             }
                         }
-                        startActivity(new Intent(SplashScreen.this, TabBar.class));
+                        startActivity(new Intent(SplashScreen.this, HomeActivity.class));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (BiffException e) {
