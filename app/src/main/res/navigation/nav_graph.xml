@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/sendRequestsFragment2">
+
+    <fragment
+        android:id="@+id/sendRequestsFragment2"
+        android:name="com.example.medicalreminder.screens.addmedfriend.SendRequestsFragment"
+        android:label="fragment_send_requests"
+        tools:layout="@layout/fragment_send_requests" />
+    <fragment
+        android:id="@+id/recievedRequestsFragment2"
+        android:name="com.example.medicalreminder.screens.addmedfriend.RecievedRequestsFragment"
+        android:label="fragment_recieved_requests"
+        tools:layout="@layout/fragment_recieved_requests" />
+</navigation>

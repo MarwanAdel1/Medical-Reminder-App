@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sendRequestsFragment2"
+        android:icon="@drawable/ic_person_24"
+        android:title="SentRequests" />
+    <item
+        android:id="@+id/recievedRequestsFragment2"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="RecievedRequests" />
+
+</menu>

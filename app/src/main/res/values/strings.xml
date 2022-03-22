@@ -20,4 +20,6 @@
     <string name="email">Email</string>
     <string name="Phone">Phone</string>
     <string name="dateOfBirth">Date Of Birth</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.medicalreminder.screens.home_screen.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +20,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.medicalreminder.R;
@@ -29,6 +33,10 @@ import com.example.medicalreminder.screens.add_dependent_screen.AddDependentFrag
 import com.example.medicalreminder.screens.add_dependent_screen.DependentActivity;
 import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
 import com.example.medicalreminder.screens.addmedfriend.MedfriendActivity;
+import com.example.medicalreminder.screens.addmedfriend.MyFriendsAdapter;
+import com.example.medicalreminder.screens.addmedfriend.OnMedfriendClickListener;
+import com.example.medicalreminder.screens.addmedfriend.RequestModel;
+import com.example.medicalreminder.screens.addmedfriend.RequestsActivity;
 import com.example.medicalreminder.screens.home_screen.presenter.HomePresenter;
 import com.example.medicalreminder.screens.home_screen.presenter.HomePresenterInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
@@ -36,8 +44,16 @@ import com.example.medicalreminder.screens.user_profile.view.UserProfileActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class HomeActivity extends AppCompatActivity implements HomeActivityInterface{
+import java.util.ArrayList;
+
+public class HomeActivity extends AppCompatActivity implements HomeActivityInterface , OnMedfriendClickListener {
 
     TabLayout tab;
     ViewPager viewPager;
@@ -53,6 +69,14 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
     ExtendedFloatingActionButton add_dose_button;
     ExtendedFloatingActionButton add_health_tracker_button;
 
+
+    MyFriendsAdapter senderFriendsAdapter ;
+    ArrayList<RequestModel> modellist ;
+    private FirebaseFirestore firestore ;
+    private FirebaseAuth firebaseAuth;
+    RecyclerView headerRecycleNavDrawar ;
+
+
     HomePresenterInterface presenterInterface;
 
     @Override
@@ -60,6 +84,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
         initUI();
+        MyMedFriends();
         setActionBar();
         setViewPager();
         presenterInterface = new HomePresenter(this, RegisterationRepo.getInstance(this , FirebaseAccess.getInstance(), LocalLoginUserData.getInstance(this)));
@@ -127,6 +152,15 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
         navUsername = (TextView) headerView.findViewById(R.id.profile_name);
         navUserImage = (ImageView) headerView.findViewById(R.id.profile_img);
         navEditeProfile = (TextView) headerView.findViewById(R.id.edit_profile);
+
+        ////////////////
+
+        firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        headerRecycleNavDrawar = headerView.findViewById(R.id.headerRecycleNavDrawar);
+        modellist = new ArrayList<>();
+
     }
 
     //--------------------------------- Start of action bar methods -------------------------------------------------------
@@ -158,7 +192,9 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
                         } else if (menuItem.toString().equals("Invite Medfriend")) {
                             Intent intent = new Intent(HomeActivity.this, MedfriendActivity.class);
                             startActivity(intent);
-                        } else if(menuItem.toString().equals("Logout")) {
+                        } else if (menuItem.toString().equals("Requests")){
+                            startActivity(new Intent(HomeActivity.this , RequestsActivity.class)); // senderRequestsActivity
+                        }else if(menuItem.toString().equals("Logout")) {
                             presenterInterface.logout();
                             startActivity(new Intent(HomeActivity.this, LoginScreenActivity.class));
                         }
@@ -208,6 +244,8 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
         add_health_tracker_button.setVisibility(View.VISIBLE);
         add_dose_button.setVisibility(View.VISIBLE);
     }
+
+
     //---------------------------------- End of Add floating action button -----------------------------------
 
     // -------------------------------------------- Start of Tab Layout (Home, Medication, Settings)---------------------
@@ -279,5 +317,46 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
     @Override
     public void onFailure(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void MyMedFriends(){
+
+        senderFriendsAdapter = new MyFriendsAdapter( this, modellist);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext()); // , LinearLayoutManager.HORIZONTAL , false
+        headerRecycleNavDrawar.setHasFixedSize(true);
+        headerRecycleNavDrawar.setLayoutManager(layoutManager);
+        headerRecycleNavDrawar.setAdapter(senderFriendsAdapter);
+
+
+        // get my meds
+        firestore.collection("MedFriends")
+                .document("MyFriends") // senderfriends   ///nargesnagy21@gmail.com
+                .collection( firebaseAuth.getCurrentUser().getEmail()) // my current user    firebaseAuth.getCurrentUser().getEmail()
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if(error != null ){
+                            Log.d("TAG", "Error : "+error.getMessage());
+                        }
+                        for (DocumentChange doc : value.getDocumentChanges()){
+
+                            RequestModel model = doc.getDocument().toObject(RequestModel.class);
+                            modellist.add(model);
+                            senderFriendsAdapter.notifyDataSetChanged();
+
+                            // if(model.getReciverName().equals("heba")) {
+                            // senderNametext.setText(model.getReciverName());
+                            //}
+
+                        }
+                    }
+                });
+
+    }
+
+
+    @Override
+    public void onMedFriendClick(RequestModel model) {
+        Toast.makeText(getApplicationContext(), "do", Toast.LENGTH_SHORT).show();
     }
 }

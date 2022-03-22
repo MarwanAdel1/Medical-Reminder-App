@@ -8,6 +8,7 @@
     tools:context=".screens.addmedfriend.AddMedfriendFragment">
 
 
+
     <ImageView
         android:id="@+id/exit"
         android:layout_width="wrap_content"
@@ -91,12 +92,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:src="@drawable/ic_person_24"
-            app:layout_constraintEnd_toStartOf="@+id/phoneedittext"
+            app:layout_constraintEnd_toStartOf="@+id/invite_phone_edittext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/nameedittext"
+            android:id="@+id/invite_name_edittext"
             android:layout_width="233dp"
             android:layout_height="55dp"
             android:layout_marginTop="15dp"
@@ -113,13 +114,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:src="@drawable/ic_phone_24"
-            app:layout_constraintEnd_toStartOf="@id/phoneedittext"
+            app:layout_constraintEnd_toStartOf="@id/invite_phone_edittext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/person" />
 
 
         <EditText
-            android:id="@+id/phoneedittext"
+            android:id="@+id/invite_phone_edittext"
             android:layout_width="233dp"
             android:layout_height="44dp"
             android:layout_marginTop="32dp"
@@ -129,7 +130,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.888"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/nameedittext" />
+            app:layout_constraintTop_toBottomOf="@+id/invite_name_edittext" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -137,13 +138,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:src="@drawable/ic_email_24"
-            app:layout_constraintEnd_toStartOf="@id/emailedittext"
+            app:layout_constraintEnd_toStartOf="@id/invite_email_edittext"
             app:layout_constraintHorizontal_bias="0.064"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <EditText
-            android:id="@+id/emailedittext"
+            android:id="@+id/invite_email_edittext"
             android:layout_width="233dp"
             android:layout_height="44dp"
             android:layout_marginTop="28dp"
@@ -153,7 +154,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.975"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/phoneedittext" />
+            app:layout_constraintTop_toBottomOf="@+id/invite_phone_edittext" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
