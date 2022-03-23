@@ -49,6 +49,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -338,19 +339,22 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
                         if(error != null ){
                             Log.d("TAG", "Error : "+error.getMessage());
                         }
-                        for (DocumentChange doc : value.getDocumentChanges()){
+                        modellist.clear();
+                        for (QueryDocumentSnapshot doc : value) {
 
-                            RequestModel model = doc.getDocument().toObject(RequestModel.class);
+                            RequestModel model = new RequestModel();
+                            model.setSenderEmail(doc.getString("senderEmail"));
+                            model.setSenderName(doc.getString("senderName"));
+                            model.setReciverEmail(doc.getString("reciverEmail"));
+                            model.setReciverName(doc.getString("reciverName"));
+                            model.setStatus(doc.getString("status"));
                             modellist.add(model);
                             senderFriendsAdapter.notifyDataSetChanged();
-
-                            // if(model.getReciverName().equals("heba")) {
-                            // senderNametext.setText(model.getReciverName());
-                            //}
 
                         }
                     }
                 });
+
 
     }
 

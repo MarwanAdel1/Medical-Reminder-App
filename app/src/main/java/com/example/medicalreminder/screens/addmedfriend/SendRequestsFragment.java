@@ -84,6 +84,7 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
                         if (error != null) {
                             Log.d("TAG", "Error : " + error.getMessage());
                         }
+                        modellist.clear();
                         for (QueryDocumentSnapshot doc : value) {
 
                             RequestModel model = new RequestModel();
@@ -106,8 +107,8 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
         // delete the request from reciverRequests
         firestore.collection("Requests")
                 .document("RecieverRequests")//
-                .collection(model.getReciverEmail()) //
-                .document(firebaseAuth.getCurrentUser().getEmail())
+                .collection(model.getReciverEmail()) // model.getreciverEmail ***********"noha@g.com"
+                .document(firebaseAuth.getCurrentUser().getEmail())//***********   model.getSenderEmail()    ***************
                 .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -115,18 +116,16 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
             }
         });
 
-        // delete request from sender requests
         firestore.collection("Requests")
                 .document("SenderRequests")//
-                .collection(firebaseAuth.getCurrentUser().getEmail())
-                .document(model.getReciverEmail())
+                .collection(firebaseAuth.getCurrentUser().getEmail())//model.getSenderEmail()
+                .document(model.getReciverEmail())//  "noha@g.com"***********
                 .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
@@ -134,7 +133,7 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
     public void OnClickDeleteSendRequest(RequestModel model) {
         // delete the request
         deleteRequest(model);
-        modellist.clear();
+
 
     }
 }

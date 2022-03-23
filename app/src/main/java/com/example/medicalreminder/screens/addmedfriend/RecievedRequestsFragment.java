@@ -27,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -104,13 +105,19 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
                         if (error != null) {
                             Log.d("TAG", "Error : " + error.getMessage());
                         }
-                        for (DocumentChange doc : value.getDocumentChanges()){
-                            if(doc.getType() == DocumentChange.Type.ADDED) {
 
-                                RequestModel model = doc.getDocument().toObject(RequestModel.class);
-                                modellist.add(model);
-                                requestsRecycleAdapter.notifyDataSetChanged();
-                            }
+
+                        for (QueryDocumentSnapshot doc : value) {
+
+                            RequestModel model = new RequestModel();
+                            model.setSenderEmail(doc.getString("senderEmail"));
+                            model.setSenderName(doc.getString("senderName"));
+                            model.setReciverEmail(doc.getString("reciverEmail"));
+                            model.setReciverName(doc.getString("reciverName"));
+                            model.setStatus(doc.getString("status"));
+                            modellist.add(model);
+                            requestsRecycleAdapter.notifyDataSetChanged();
+
                         }
 
 
@@ -123,10 +130,11 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
     public void deleteRequest(RequestModel model) {
 
         // delete the request from reciverRequests
+
         firestore.collection("Requests")
                 .document("RecieverRequests")//
-                .collection("jiji@g.com") // model.getReciverEmail() ***********
-                .document(model.getSenderEmail())//***********   or my user  firebaseAuth.getCurrentUser().getEmail()  ***************
+                .collection(model.getReciverEmail()) // model.getreciverEmail ***********"noha@g.com"
+                .document(firebaseAuth.getCurrentUser().getEmail())//***********   model.getSenderEmail()    ***************
                 .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -134,11 +142,10 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
             }
         });
 
-        // delete the request from sender requests
         firestore.collection("Requests")
                 .document("SenderRequests")//
-                .collection(model.getSenderEmail()) // or my user  firebaseAuth.getCurrentUser().getEmail()
-                .document("jiji@g.com")//  *********** model.getReciverEmail()
+                .collection(firebaseAuth.getCurrentUser().getEmail())//model.getSenderEmail()
+                .document(model.getReciverEmail())//  "noha@g.com"***********
                 .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -146,15 +153,16 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
             }
         });
 
+        modellist.clear();
     }
 
     public void saveAsMedFreiend(RequestModel model) {
-
+/*
         // save sender medfriends
         firestore.collection("MedFriends")
                 .document("MyFriends")
                 .collection(model.getSenderEmail())
-                .document(model.getReciverEmail()) //or firebaseAuth.getCurrentUser().getEmail() *********// ()
+                .document(model.getReciverEmail()) //or firebaseAuth.getCurrentUser().getEmail() *********
                 .set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -166,6 +174,26 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getContext(), "fail to add sender medfriend", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+*/
+
+        firestore.collection("MedFriends")
+                .document("MyFriends")
+                .collection(model.getSenderEmail())  // or firebaseAuth.getCurrentUser().getEmail()  **********/
+                .document(model.getReciverEmail())
+                .set(model)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getContext(), "recieverMedfriendadded_added", Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "fail to add reciever medfriend", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -202,6 +230,7 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
 
         // save as medfriend
         saveAsMedFreiend(model);
+
     }
 
     @Override
@@ -209,6 +238,7 @@ public class RecievedRequestsFragment extends Fragment implements OnAcceptClickL
 
         // delete request
         deleteRequest(model);
+
 
     }
 }

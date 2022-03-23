@@ -92,10 +92,8 @@ public class AddMedfriendFragment extends Fragment {
                                     for(QueryDocumentSnapshot doc : value) {
 
                                         RequestModel model = new RequestModel();
-                                        if (invite_email_edittext.getText().toString().equals(doc.getString("reciverEmail"))){
-                                            Toast.makeText(getContext(), "Already friend", Toast.LENGTH_SHORT).show();
 
-                                        }else{
+                                        if (!(invite_email_edittext.getText().toString().equals(doc.getString("reciverEmail")))){
                                             send();
                                         }
                                     }
@@ -137,8 +135,7 @@ public class AddMedfriendFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "SederRequests_added", Toast.LENGTH_SHORT).show();
-                        Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                             //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -158,8 +155,7 @@ public class AddMedfriendFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "RecieverRequests_added", Toast.LENGTH_SHORT).show();
-                        Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                         //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -211,8 +207,7 @@ public class AddMedfriendFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "SederRequests_added", Toast.LENGTH_SHORT).show();
-                        Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                        // Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -232,8 +227,7 @@ public class AddMedfriendFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "RecieverRequests_added", Toast.LENGTH_SHORT).show();
-                        Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                         // Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
