@@ -14,18 +14,19 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MedicationRecycleViewAdapter extends RecyclerView.Adapter<MedicationRecycleViewAdapter.MedicationViewHolder> {
 
-    private ArrayList<Medicine> myItems ;
+    private List<Medicine> myItems ;
     private OnMedClickListener listener ;
 
-    public MedicationRecycleViewAdapter( OnMedClickListener listener , ArrayList<Medicine>myItems){
+    public MedicationRecycleViewAdapter( OnMedClickListener listener , List<Medicine>myItems){
         this.myItems=myItems;
         this.listener = listener ;
     }
 
-    public void setMyItems(ArrayList<Medicine> myItems) {
+    public void setMyItems(List<Medicine> myItems) {
         this.myItems = myItems;
     }
 

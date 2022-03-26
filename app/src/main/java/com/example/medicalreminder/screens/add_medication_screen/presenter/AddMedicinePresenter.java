@@ -10,7 +10,7 @@ import com.example.medicalreminder.model.MedicineRepoInterface;
 import com.example.medicalreminder.pojo.DoseTime;
 import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.pojo.MedicineNotification;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineViewInterface;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class AddMedicinePresenter implements AddMedicinePresenterInterface {
     }
 
     @Override
-    public void addMedicineToDatabase(Medicine medicine,MedicineNotification medicineNotification) {
+    public void addMedicineToDatabase(Medicine medicine, MedicineNotification medicineNotification) {
         for (Map.Entry<String, List<DoseTime>> entry : medicine.getMedTimeDosesPerDay().entrySet()) {
             medicineNotification.setDate(entry.getKey());
 
@@ -42,15 +42,16 @@ public class AddMedicinePresenter implements AddMedicinePresenterInterface {
             m.setStrength(medicineNotification.getStrength());
             m.setMedLastTakenTime("");
             m.setMedLastTakenDate("");
-            m.setInstruction("Before");
+            m.setInstruction(medicine.getMedInstruction());
             m.setUserName("Marwan");
+
 
             for (int i = 0; i < entry.getValue().size(); i++) {
                 m.setTime(entry.getValue().get(i).getHour()+":"+entry.getValue().get(i).getMinute());
                 //medicineNotification.setTime(entry.getValue().get(i).getHour() + ":" + entry.getValue().get(i).getMinute());
-                Log.e(MedicineRepo.class.getSimpleName(),"Bye0 : "+entry.getKey());
-                Log.e(MedicineRepo.class.getSimpleName(),"Bye0 : "+entry.getValue().size());
-                medicineRepoInterface.addMedicineToDatabase(m,addMedicineViewInterface);
+                Log.e(MedicineRepo.class.getSimpleName(), "Bye0 : " + entry.getKey());
+                Log.e(MedicineRepo.class.getSimpleName(), "Bye0 : " + entry.getValue().size());
+                medicineRepoInterface.addMedicineToDatabase(m, addMedicineViewInterface);
             }
         }
     }

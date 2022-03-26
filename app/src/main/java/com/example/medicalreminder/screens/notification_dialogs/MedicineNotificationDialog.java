@@ -5,27 +5,42 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.medicalreminder.R;
+import com.example.medicalreminder.local_data.room_database.DatabaseAccess;
+import com.example.medicalreminder.pojo.MedicineNotification;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MedicineNotificationDialog extends AppCompatActivity {
     private Dialog dialog;
 
-    private Button cancelBtn, deleteBtn;
-    private TextView medNameDialog;
+    private ImageView getDeleteButton, editButton, takeButton, skipButton, rescheduleButton;
+    private TextView medicineName, medicineDetails, medicineTime;
 
     private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medicine_notification_dialog);
+        setContentView(R.layout.notification_dailouge);
 
         getWindow().setLayout(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -54,9 +69,35 @@ public class MedicineNotificationDialog extends AppCompatActivity {
     private void createDialog() {
         dialog = new Dialog(this);
         //set content
-        dialog.setContentView(R.layout.medicine_notification_dialog);
+        dialog.setContentView(R.layout.notification_dailouge);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+        init();
+        SimpleDateFormat dtf = new SimpleDateFormat("dd-MM-yyyy", Locale.UK);
+        Date today = new Date();
+        String selectedDate = dtf.format(today.getTime());
+        DatabaseAccess.getInstance(this).getTodayNotification(selectedDate).observe(this, new Observer<List<MedicineNotification>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onChanged(List<MedicineNotification> medicineNotifications) {
+                if(medicineNotifications != null){
+                    for(int i=0 ; i<medicineNotifications.size(); i++){
+//                        if(medicineNotifications.get(i).getTime() == )
+                        Log.i("TAG", "onChanged: " + medicineNotifications.get(i).getTime());
+                        LocalDateTime now = LocalDateTime.now();
+                        String time = now.getHour() + ":" + now.getMinute();
+                        Log.i("TAG", "onChanged: time " + time);
+                        if((medicineNotifications.get(i).getTime()).equals(time)){
+                            Log.i("TAG", "name: " + medicineNotifications.get(i).getMedicineName());
+                            medicineName.setText(medicineNotifications.get(i).getMedicineName());
+                            medicineTime.setText("Scheduled for " + medicineNotifications.get(i).getTime());
+                            String strength = String.valueOf(medicineNotifications.get(i).getStrength());
+                            String strengthUnit = medicineNotifications.get(i).getStrenthUnit();
+                            medicineDetails.setText(strength + strengthUnit);
+                        }
+                    }
+                }
+            }
+        });
 //        medNameDialog = (TextView) dialog.findViewById(R.id.name_delete_dialog_tx_id);
 //        cancelBtn = (Button) dialog.findViewById(R.id.cancel_dialog_button);
 //        deleteBtn = (Button) dialog.findViewById(R.id.delete_dialog_button);
@@ -85,5 +126,16 @@ public class MedicineNotificationDialog extends AppCompatActivity {
 //                finish();
 //            }
 //        });
+    }
+
+    void init(){
+        getDeleteButton = findViewById(R.id.delete_btn);
+        editButton = findViewById(R.id.edite_btn);
+        takeButton = findViewById(R.id.take_btn);
+        skipButton = findViewById(R.id.skip_btn);
+        rescheduleButton = findViewById(R.id.reschedule_btn);
+        medicineName = findViewById(R.id.medicine_name);
+        medicineDetails = findViewById(R.id.medicine_details);
+        medicineTime = findViewById(R.id.medicine_time);
     }
 }

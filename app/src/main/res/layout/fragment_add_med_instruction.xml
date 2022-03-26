@@ -33,12 +33,12 @@
 
 
     <TextView
-        android:id="@+id/med_day_name"
+        android:id="@+id/med_name_question_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="1st day, Which day do you want?"
+        android:text="Set medicine instructions"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/constraint3_id"

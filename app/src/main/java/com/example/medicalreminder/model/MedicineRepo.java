@@ -8,7 +8,8 @@ import com.example.medicalreminder.local_data.room_database.DatabaseAccessInterf
 import com.example.medicalreminder.network_data.FirebaseAccessInterface;
 import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.pojo.MedicineNotification;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.home_screen.presenter.MedicationPresenterInterface;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
 import com.example.medicalreminder.screens.medication_drug_edit_screen.view.EditMedicationDrugViewInterface;
 
@@ -62,4 +63,17 @@ public class MedicineRepo implements MedicineRepoInterface {
     public LiveData<List<MedicineNotification>> getTodayNotificationFromRoom(String date) {
         return databaseAccessInterface.getTodayNotification(date);
     }
+
+
+    @Override
+    public void getMedicens(String email,MedicationPresenterInterface medicationPresenterInterface) {
+        firebaseAccessInterface.getMedication(email,this, medicationPresenterInterface);
+    }
+
+    @Override
+    public void returnMedicines(List<Medicine> active, List<Medicine> inactive, MedicationPresenterInterface medicationPresenterInterface) {
+        medicationPresenterInterface.returnMedicine(active,inactive);
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,21 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.adapters.MedAdatpter;
-import com.example.medicalreminder.screens.add_medication_screen.view.AdapterClickListener;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
-
-public class AddMedTimePeriodFragment extends Fragment implements AdapterClickListener {
-    public static final String[] medTimePeriod = {"Morning", "Noon","Evening"};
+import com.example.medicalreminder.screens.add_medication_screen.AdapterClickListener;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 
-    private RecyclerView recyclerView;
+public class AddMedInstructionFragment extends Fragment implements AdapterClickListener {
+    private final String[] instruction = {"Before eating", "While eating", "After eating"};
+
     private ImageView backImg;
+    private RecyclerView recyclerView;
 
     private AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator;
 
-    public AddMedTimePeriodFragment(AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator){
-        this.addMedicineFragmentsCommunicator=addMedicineFragmentsCommunicator;
+    public AddMedInstructionFragment(AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator) {
+        this.addMedicineFragmentsCommunicator = addMedicineFragmentsCommunicator;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,12 +41,14 @@ public class AddMedTimePeriodFragment extends Fragment implements AdapterClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_med_period, container, false);
+        return inflater.inflate(R.layout.fragment_add_med_instruction, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        backImg=view.findViewById(R.id.close_img_id);
+        super.onViewCreated(view, savedInstanceState);
+
+        backImg = view.findViewById(R.id.close_img_id);
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,9 +56,10 @@ public class AddMedTimePeriodFragment extends Fragment implements AdapterClickLi
             }
         });
 
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        MedAdatpter medAdatpter = new MedAdatpter(getActivity().getApplicationContext(), medTimePeriod, this);
+        MedAdatpter medAdatpter = new MedAdatpter(getActivity().getApplicationContext(), instruction,this);
         recyclerView = view.findViewById(R.id.recycler_view_id);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(medAdatpter);
@@ -63,6 +67,6 @@ public class AddMedTimePeriodFragment extends Fragment implements AdapterClickLi
 
     @Override
     public void updateUi(String medData) {
-        addMedicineFragmentsCommunicator.sendTimePeriod(medData);
+        addMedicineFragmentsCommunicator.saveMedInstruction(medData);
     }
 }

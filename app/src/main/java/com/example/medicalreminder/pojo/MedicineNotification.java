@@ -6,9 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
 
-import com.example.medicalreminder.local_data.room_database.RoomConverter;
-
-@TypeConverters(RoomConverter.class)
 @Entity(tableName = "Doses_time", primaryKeys = {"date", "time", "userName", "medicineName"})
 public class MedicineNotification {
 

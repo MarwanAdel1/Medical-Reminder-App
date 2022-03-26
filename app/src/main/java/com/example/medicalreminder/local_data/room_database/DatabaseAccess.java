@@ -64,4 +64,6 @@ public class DatabaseAccess implements DatabaseAccessInterface {
         mediciListLiveData = medicineDao.getTodaysNotifications(date);
         return mediciListLiveData;
     }
+
+
 }

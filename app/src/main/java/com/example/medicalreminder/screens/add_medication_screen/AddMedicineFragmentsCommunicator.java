@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view;
+package com.example.medicalreminder.screens.add_medication_screen;
 
 import com.example.medicalreminder.pojo.Medicine;
 
@@ -20,6 +20,8 @@ public interface AddMedicineFragmentsCommunicator {
 
     public void setMedNumberOfRepeatingPerday(int numberOfPills,int hour, int minutes);
 
+    public void setMedNumberOfRepeatedDayPerWeek(int dayNumber);
+
     public void setMedRepeatingPeriod(int choice, Medicine medicine);
 
     public void backFragment();
@@ -29,5 +31,15 @@ public interface AddMedicineFragmentsCommunicator {
     public void sendTimePeriod(String timePeriod);
 
     public void setStartDate(int day,int month,int year);
+
+    public void saveRepeatedDates(Medicine medicine);
+
+    public void saveMedRefillRemindar(int leastNumber,int totalNumber);
+
+    public void saveMedInstruction(String instruction);
+
+    public void goToRefillRemindar();
+
+    public void goToInstruction();
 
 }

@@ -17,7 +17,7 @@ public class StartSplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         setContentView(R.layout.activity_start_splash_screen);
 
         //      Initialize firebaseAuth
@@ -32,7 +32,7 @@ public class StartSplashScreen extends AppCompatActivity {
             startActivity(new Intent(StartSplashScreen.this, LoginScreenActivity.class));
         }
         else {
-            startActivity(new Intent(StartSplashScreen.this, HomeActivity.class));
+            startActivity(new Intent(StartSplashScreen.this, SplashScreen.class));
         }
         
     }

@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.adapters.MedAdatpter;
-import com.example.medicalreminder.screens.add_medication_screen.view.AdapterClickListener;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.screens.add_medication_screen.AdapterClickListener;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 public class AddMedFormFragment extends Fragment implements AdapterClickListener {
-    private final String[] medForms = {"Pill", "Solution", "Injection", "Powder", "Drops", "Inhaler", "Other"};
+    private final String[] medForms = {"Pill", "Solution", "Injection", "Powder", "Drops", "Inhaler"};
     private RecyclerView recyclerView;
     private ImageView backImg;
 

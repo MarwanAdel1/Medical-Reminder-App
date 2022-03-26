@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/addMedicationBackgroundColor"
+    tools:context=".screens.add_medication_screen.view.fragments.AddMedNameFragment">
+
+    <ImageView
+        android:id="@+id/close_img_id"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/back_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <TextView
+        android:id="@+id/add_medication_tx_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_medication_title"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/close_img_id"
+        app:layout_constraintTop_toTopOf="@id/close_img_id" />
+
+
+    <TextView
+        android:id="@+id/med_name_question_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/MedStrength"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/constraint3_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_medication_tx_id" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint3_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_top_corners"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.7">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_id"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5">
+
+            <EditText
+                android:id="@+id/med_remindar_et_id"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/white"
+                android:hint="Least number"
+                android:inputType="number"
+                android:textColorHint="@color/addMedicationBackgroundColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/error_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The Field mustn't be blank!!"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/text_input_layout_id"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_id" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text2_input_layout_id"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_tx"
+            app:layout_constraintWidth_percent="0.5">
+
+            <EditText
+                android:id="@+id/total_med_et_id"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/white"
+                android:hint="Total Meds"
+                android:inputType="number"
+                android:textColorHint="@color/addMedicationBackgroundColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/error2_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The Field mustn't be blank!!"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/text_input_layout_id"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_id" />
+
+        <Button
+            android:id="@+id/set_remindar_bt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/addMedicationBackgroundColor"
+            android:text="Set Remindar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_id"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintWidth_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

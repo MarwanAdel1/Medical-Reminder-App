@@ -3,6 +3,7 @@
     package="com.example.medicalreminder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -32,13 +33,17 @@
         <activity
             android:name=".screens.SplashScreen"
             android:theme="@style/bottomNavigationBar" />
+        <activity
+            android:name=".screens.addmedfriend.SeeMyMedfriendMediciensActivity"
+            android:exported="false" />
         <activity android:name=".screens.login_screen.view.LoginScreenActivity" />
+        <activity android:name=".screens.add_medication_screen.AddMedicationActivityScreen" />
+        <activity android:name=".screens.notification_dialogs.MedicineNotificationDialog" />
         <activity android:name=".screens.login_screen.view.Login_fb" />
         <activity android:name=".screens.medication_drug_edit_screen.view.EditMedicationDrugScreen" />
         <activity android:name=".screens.medication_drug_display_screen.view.MedicationDrugScreen" />
         <activity android:name=".screens.add_dependent_screen.DependentActivity" />
         <activity android:name=".screens.addmedfriend.MedfriendActivity" />
-        <activity android:name=".screens.add_medication_screen.view.AddMedicationActivityScreen" />
         <activity android:name=".screens.MainActivity" />
         <activity android:name=".screens.home_screen.view.HomeActivity" />
 

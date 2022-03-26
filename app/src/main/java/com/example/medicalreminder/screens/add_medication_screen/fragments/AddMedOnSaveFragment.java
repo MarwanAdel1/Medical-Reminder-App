@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.adapters.MedAdatpter;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AdapterClickListener;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.screens.add_medication_screen.AdapterClickListener;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 public class AddMedOnSaveFragment extends Fragment implements AdapterClickListener {
-    private final String[] finalList = {"Set treatment duration", "Add instructions", "Change medicine icon"};
+    private final String[] finalList = {"Set refill remindar", "Add instructions", "Change medicine icon"};
 
     private Medicine medicine;
 
@@ -93,11 +93,11 @@ public class AddMedOnSaveFragment extends Fragment implements AdapterClickListen
 
     @Override
     public void updateUi(String medData) {
-        if (medData.equalsIgnoreCase(finalList[0])) {
-
-        } else if (medData.equalsIgnoreCase(finalList[1])) {
-
-        } else if (medData.equalsIgnoreCase(finalList[2])) {
+        if (medData.equalsIgnoreCase("set refill remindar")) {
+            addMedicineFragmentsCommunicator.goToRefillRemindar();
+        } else if (medData.equalsIgnoreCase("add instructions")) {
+            addMedicineFragmentsCommunicator.goToInstruction();
+        } else if (medData.equalsIgnoreCase("change medicine icon")) {
 
         }
     }

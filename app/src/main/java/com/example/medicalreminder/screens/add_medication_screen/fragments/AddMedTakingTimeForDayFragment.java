@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 public class AddMedTakingTimeForDayFragment extends Fragment {
     private Medicine medicine;

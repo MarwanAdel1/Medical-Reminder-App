@@ -13,13 +13,13 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.screens.add_medication_screen.AdapterClickListener;
 import com.example.medicalreminder.screens.add_medication_screen.fragments.AddMedFormFragment;
 
-public class MedAdatpter extends RecyclerView.Adapter<MedAdatpter.ViewHolder> {
+public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder>{
     private AddMedFormFragment addMedFormFragment;
     private Context context;
     private String[] medFormList;
     private AdapterClickListener adapterClickListener;
 
-    public MedAdatpter(Context context, String[] medFormList, AdapterClickListener adapterClickListener) {
+    public DaysAdapter(Context context, String[] medFormList, AdapterClickListener adapterClickListener) {
         this.context = context;
         this.medFormList = medFormList;
         this.adapterClickListener = adapterClickListener;
@@ -64,4 +64,5 @@ public class MedAdatpter extends RecyclerView.Adapter<MedAdatpter.ViewHolder> {
             titleTx = itemView.findViewById(R.id.form_title);
         }
     }
+
 }

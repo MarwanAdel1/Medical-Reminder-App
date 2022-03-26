@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 import java.util.Calendar;
 
@@ -31,9 +31,9 @@ public class AddMedTreatmentDurationFragment extends Fragment {
     private int year;
 
     public AddMedTreatmentDurationFragment(AddMedicineFragmentsCommunicator addMedicineFragmentsCommunicator) {
-        this.addMedicineFragmentsCommunicator=addMedicineFragmentsCommunicator;
+        this.addMedicineFragmentsCommunicator = addMedicineFragmentsCommunicator;
         day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        month= Calendar.getInstance().get(Calendar.MONTH)+1;
+        month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         year = Calendar.getInstance().get(Calendar.YEAR);
     }
 
@@ -55,13 +55,14 @@ public class AddMedTreatmentDurationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         datePicker = view.findViewById(R.id.date_picker);
+        datePicker.setMinDate(Calendar.getInstance().getTimeInMillis());
         datePicker.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                Log.e(AddMedTreatmentDurationFragment.class.getSimpleName(),"Cal : "+i2+"-"+i1+"-"+i);
-                day=i2;
-                month=i1+1;
-                year=i;
+                Log.e(AddMedTreatmentDurationFragment.class.getSimpleName(), "Cal : " + i2 + "-" + i1 + "-" + i);
+                day = i2;
+                month = i1 + 1;
+                year = i;
             }
         });
 
@@ -78,7 +79,7 @@ public class AddMedTreatmentDurationFragment extends Fragment {
         toEndDateBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(AddMedTreatmentDurationFragment.class.getSimpleName(),day+"-"+month+"-"+year);
+                Log.e(AddMedTreatmentDurationFragment.class.getSimpleName(), day + "-" + month + "-" + year);
                 addMedicineFragmentsCommunicator.setStartDate(
                         day,
                         month,

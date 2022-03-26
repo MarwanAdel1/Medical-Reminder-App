@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.medicalreminder.R;
-import com.example.medicalreminder.screens.add_medication_screen.view.fragments.AddMedNameFragment;
+import com.example.medicalreminder.screens.add_medication_screen.fragments.AddMedNameFragment;
 import com.example.medicalreminder.screens.home_screen.view.HomeActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;

@@ -1,4 +1,4 @@
-package com.example.medicalreminder.screens.add_medication_screen.view.fragments;
+package com.example.medicalreminder.screens.add_medication_screen.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,8 +16,9 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.adapters.MedAdatpter;
 import com.example.medicalreminder.local_data.MedRepeating;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AdapterClickListener;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineFragmentsCommunicator;
+import com.example.medicalreminder.screens.add_medication_screen.AdapterClickListener;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicationActivityScreen;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineFragmentsCommunicator;
 
 public class AddMedRepeatingPeriodFragment extends Fragment implements AdapterClickListener {
     private RecyclerView recyclerView;
@@ -48,6 +49,10 @@ public class AddMedRepeatingPeriodFragment extends Fragment implements AdapterCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        AddMedicationActivityScreen.doses.clear();
+        AddMedTakingTimeForWeekFragment.count=0;
+        AddMedicationActivityScreen.daysNumber.clear();
+
         backImg=view.findViewById(R.id.close_img_id);
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +70,7 @@ public class AddMedRepeatingPeriodFragment extends Fragment implements AdapterCl
         } else if (medicine.getMedRepeatingFrequency() == 2) {
             medAdatpter = new MedAdatpter(getActivity().getApplicationContext(), MedRepeating.notDailyRepeated, this);
         } else if (medicine.getMedRepeatingFrequency() == 0) {
-
+////only as needed
         }
 
         recyclerView = view.findViewById(R.id.recycler_view_id);

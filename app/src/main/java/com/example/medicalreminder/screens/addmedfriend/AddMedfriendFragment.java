@@ -1,14 +1,11 @@
 package com.example.medicalreminder.screens.addmedfriend;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +17,10 @@ import android.widget.Toast;
 
 import com.example.medicalreminder.R;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -73,38 +70,42 @@ public class AddMedfriendFragment extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 // save request in firestore
-                if (!invite_email_edittext.getText().toString().equals("") && !invite_name_edittext.getText().toString().equals("")) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    if (!invite_email_edittext.getText().toString().equals("") && !invite_name_edittext.getText().toString().equals("")) {
+                        // if in meds
+                        if (!(invite_email_edittext.getText().toString().equals(firebaseAuth.getCurrentUser().getEmail()))) {
+                            firestore.collection("MedFriends")
+                                    .document("MyFriends") // senderfriends   ///nargesnagy21@gmail.com
+                                    .collection(firebaseAuth.getCurrentUser().getEmail()) // my current user    firebaseAuth.getCurrentUser().getEmail()
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                            if (error != null) {
+                                                Log.d("TAG", "Error : " + error.getMessage());
+                                            }
+                                            boolean found = false;
+                                            for (QueryDocumentSnapshot doc : value) {
+                                                if (invite_email_edittext.getText().toString().equals(doc.getString("reciverEmail"))) {
+                                                    found = true;
 
+                                                }
+                                            }
 
-                    // if in meds
-                    firestore.collection("MedFriends")
-                            .document("MyFriends") // senderfriends   ///nargesnagy21@gmail.com
-                            .collection( firebaseAuth.getCurrentUser().getEmail()) // my current user    firebaseAuth.getCurrentUser().getEmail()
-                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    if(error != null ){
-                                        Log.d("TAG", "Error : "+error.getMessage());
-                                    }
-                                    for(QueryDocumentSnapshot doc : value) {
-
-                                        RequestModel model = new RequestModel();
-
-                                        if (!(invite_email_edittext.getText().toString().equals(doc.getString("reciverEmail")))){
-                                            send();
+                                            if (!found) {
+                                                send();
+                                            }
+                                            //  getActivity().finish();
                                         }
-                                    }
-                                }
-                            });
-
-                } else {
-                    Toast.makeText(getContext(), "please enter a name and email", Toast.LENGTH_SHORT).show();
+                                    });
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), "you cant sent to your self", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "please enter a name and email", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-
             }
         });
 
@@ -112,19 +113,16 @@ public class AddMedfriendFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // close the fragmnt
-                onDestroy();
+                getActivity().finish();
             }
         });
 
 
     }
 
-    public void onSend(){
+    public void send() {
 
-        senderRequestModel = new RequestModel(firebaseAuth.getCurrentUser().getEmail().toString(), "maha", invite_email_edittext.getText().toString(), invite_name_edittext.getText().toString(), "pending");
-
-        recieverRequestModel = new RequestModel(firebaseAuth.getCurrentUser().getEmail().toString(), "maha", invite_email_edittext.getText().toString(), invite_name_edittext.getText().toString());
-
+        senderRequestModel = new RequestModel(firebaseAuth.getCurrentUser().getEmail().toString(), "Narges", invite_email_edittext.getText().toString(), invite_name_edittext.getText().toString(), "pending");
 
         // add senderRequests data
         firestore.collection("Requests")
@@ -135,7 +133,7 @@ public class AddMedfriendFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                             //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                        //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -151,83 +149,11 @@ public class AddMedfriendFragment extends Fragment {
                 .document("RecieverRequests")
                 .collection(invite_email_edittext.getText().toString())
                 .document(firebaseAuth.getCurrentUser().getEmail())
-                .set(recieverRequestModel)
+                .set(senderRequestModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                         //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-
-    }
-
-    public void send(){
-        senderRequestModel = new RequestModel(firebaseAuth.getCurrentUser().getEmail().toString(), "maha", invite_email_edittext.getText().toString(), invite_name_edittext.getText().toString(), "pending");
-
-        recieverRequestModel = new RequestModel(firebaseAuth.getCurrentUser().getEmail().toString(), "maha", invite_email_edittext.getText().toString(), invite_name_edittext.getText().toString());
-
-        //  Requests / senderRequests path
-        documentReferenceSender = firestore.collection("Requests")
-                .document("SenderRequests")//
-                .collection(firebaseAuth.getCurrentUser().getEmail())
-                .document();  // invite_email_edittext.getText().toString()   // change to be defualt
-
-
-                /*
-                // add medicen when send a request
-                documentReferenceSender.set(model)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getContext(), "added", Toast.LENGTH_SHORT).show();
-                                Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-
-                 */
-
-        // add senderRequests data
-        firestore.collection("Requests")
-                .document("SenderRequests")//
-                .collection(firebaseAuth.getCurrentUser().getEmail())
-                .document(invite_email_edittext.getText().toString()) // name of reciever to avoid redundent  ************************** () TEST
-                .set(senderRequestModel) // model for sender and reciever
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-
-
-        // add Reciever Requests data
-        firestore.collection("Requests")
-                .document("RecieverRequests")
-                .collection(invite_email_edittext.getText().toString())
-                .document(firebaseAuth.getCurrentUser().getEmail())// name of sender *********************************** ()  TEST
-                .set(recieverRequestModel) // model for sender and reciever
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                         // Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
+                        //Log.d(AddMedicationActivityScreen.class.getSimpleName(), "DocumentSnapshot added");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

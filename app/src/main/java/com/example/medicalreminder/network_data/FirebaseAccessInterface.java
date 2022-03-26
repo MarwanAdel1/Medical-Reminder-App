@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.medicalreminder.local_data.LocalLoginUserData;
+import com.example.medicalreminder.model.MedicineRepoInterface;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.home_screen.presenter.MedicationPresenterInterface;
 import com.example.medicalreminder.screens.home_screen.view.HomeActivityInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivityInterface;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
@@ -41,4 +43,6 @@ public interface FirebaseAccessInterface {
 
     //      for logout
     public void logout();
+
+    public void getMedication(String email, MedicineRepoInterface medicineRepoInterface, MedicationPresenterInterface medicationPresenterInterface);
 }

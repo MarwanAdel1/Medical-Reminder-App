@@ -82,6 +82,12 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
         String medicinesNoPerDose = String.valueOf(medicine.getMedNumberOfPillsPerDose());
         holder.getMedicineDetails().setText(medicineStrength + medicineStrengthUnit + ", " + medicinesNoPerDose + " Pill(s)");
         holder.getTimeValue().setText(myMedicines.get(position).getTime());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(medicine,position);
+            }
+        });
     }
 
     @Override

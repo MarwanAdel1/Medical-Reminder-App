@@ -28,6 +28,9 @@ public class RecieverRequestsRecycleAdapter extends RecyclerView.Adapter<Recieve
         this.acceptlistener = acceptlistener ;
         this.myItems = myItems ;
     }
+    public void setMyItems(ArrayList<RequestModel> myItems){
+        this.myItems=myItems;
+    }
 
 
     @NonNull

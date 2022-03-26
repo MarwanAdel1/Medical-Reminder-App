@@ -8,7 +8,7 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import com.example.medicalreminder.pojo.MedicineNotification;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicationActivityScreen;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -28,15 +28,15 @@ import com.example.medicalreminder.R;
 import com.example.medicalreminder.local_data.LocalLoginUserData;
 import com.example.medicalreminder.model.RegisterationRepo;
 import com.example.medicalreminder.network_data.FirebaseAccess;
-import com.example.medicalreminder.screens.SplashScreen;
 import com.example.medicalreminder.screens.add_dependent_screen.AddDependentFragment;
 import com.example.medicalreminder.screens.add_dependent_screen.DependentActivity;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicationActivityScreen;
 import com.example.medicalreminder.screens.addmedfriend.MedfriendActivity;
 import com.example.medicalreminder.screens.addmedfriend.MyFriendsAdapter;
 import com.example.medicalreminder.screens.addmedfriend.OnMedfriendClickListener;
 import com.example.medicalreminder.screens.addmedfriend.RequestModel;
 import com.example.medicalreminder.screens.addmedfriend.RequestsActivity;
+import com.example.medicalreminder.screens.addmedfriend.SeeMyMedfriendMediciensActivity;
 import com.example.medicalreminder.screens.home_screen.presenter.HomePresenter;
 import com.example.medicalreminder.screens.home_screen.presenter.HomePresenterInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivity;
@@ -45,7 +45,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -69,6 +69,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
     ExtendedFloatingActionButton add_medication_button;
     ExtendedFloatingActionButton add_dose_button;
     ExtendedFloatingActionButton add_health_tracker_button;
+    private FirebaseUser user;
 
 
     MyFriendsAdapter senderFriendsAdapter ;
@@ -158,7 +159,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
         headerRecycleNavDrawar = headerView.findViewById(R.id.headerRecycleNavDrawar);
         modellist = new ArrayList<>();
 
@@ -328,39 +329,54 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityInter
         headerRecycleNavDrawar.setLayoutManager(layoutManager);
         headerRecycleNavDrawar.setAdapter(senderFriendsAdapter);
 
+        if(user!=null){
+            // get my meds
+            firestore.collection("MedFriends")
+                    .document("MyFriends") // senderfriends   ///nargesnagy21@gmail.com
+                    .collection( firebaseAuth.getCurrentUser().getEmail()) // my current user    firebaseAuth.getCurrentUser().getEmail()
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if(error != null ){
+                                Log.d("TAG", "Error : "+error.getMessage());
+                            }
+                            modellist.clear();
+                            for (QueryDocumentSnapshot doc : value) {
 
-        // get my meds
-        firestore.collection("MedFriends")
-                .document("MyFriends") // senderfriends   ///nargesnagy21@gmail.com
-                .collection( firebaseAuth.getCurrentUser().getEmail()) // my current user    firebaseAuth.getCurrentUser().getEmail()
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error != null ){
-                            Log.d("TAG", "Error : "+error.getMessage());
-                        }
-                        modellist.clear();
-                        for (QueryDocumentSnapshot doc : value) {
 
-                            RequestModel model = new RequestModel();
-                            model.setSenderEmail(doc.getString("senderEmail"));
-                            model.setSenderName(doc.getString("senderName"));
-                            model.setReciverEmail(doc.getString("reciverEmail"));
-                            model.setReciverName(doc.getString("reciverName"));
-                            model.setStatus(doc.getString("status"));
-                            modellist.add(model);
+                                RequestModel model = new RequestModel();
+                                model.setSenderEmail(doc.getString("senderEmail"));
+                                model.setSenderName(doc.getString("senderName"));
+                                model.setReciverEmail(doc.getString("reciverEmail"));
+                                model.setReciverName(doc.getString("reciverName"));
+                                model.setStatus(doc.getString("status"));
+                                modellist.add(model);
+
+                            }
+                            senderFriendsAdapter.setMyItems(modellist);
                             senderFriendsAdapter.notifyDataSetChanged();
 
                         }
-                    }
-                });
+                    });
 
+        }else{
+        }
 
     }
 
 
     @Override
     public void onMedFriendClick(RequestModel model) {
-        Toast.makeText(getApplicationContext(), "do", Toast.LENGTH_SHORT).show();
+
+        if(model.getStatus().equals("1")){
+            Intent intent = new Intent(HomeActivity.this , SeeMyMedfriendMediciensActivity.class);
+            intent.putExtra("SENDERMAIL",model.getSenderEmail());
+            intent.putExtra("RECIEVERMAIL",model.getReciverEmail());
+
+            startActivity(intent);
+        }else{
+            Toast.makeText(getApplicationContext(), "you cant see your medfriend meds", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

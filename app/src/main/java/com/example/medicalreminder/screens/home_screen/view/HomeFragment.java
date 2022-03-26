@@ -1,6 +1,5 @@
 package com.example.medicalreminder.screens.home_screen.view;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +20,6 @@ import com.example.medicalreminder.pojo.DoseTime;
 import com.example.medicalreminder.pojo.Medicine;
 import com.example.medicalreminder.pojo.MedicineTimeList;
 import com.example.medicalreminder.screens.medication.OnMedClickListener;
-import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,10 +50,13 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
     private List<MedicineTimeList> medicineTime;
 
 
-    public HomeFragment() {}
+    public HomeFragment() {
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
             }
 
             @Override
-            public void onCalendarScroll(HorizontalCalendarView calendarView,int dx, int dy) {
+            public void onCalendarScroll(HorizontalCalendarView calendarView, int dx, int dy) {
 
             }
 
@@ -108,10 +109,10 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
                 return true;
             }
         });
-    // ------------------------------------------ End of calendar ------------------------------------------------
+        // ------------------------------------------ End of calendar ------------------------------------------------
 
 
-    //------------------------------------------- Start of medicines list -----------------------------------------
+        //------------------------------------------- Start of medicines list -----------------------------------------
         medicineTime = new ArrayList<>();
         adapter = new MedicineAdapter(this, medicineTime);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -123,13 +124,13 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
 
     @Override
     public void onClick(Medicine model, int position) {
-        Intent intent = new Intent(getActivity().getApplicationContext(), MedicationDrugScreen.class);
-        intent.putExtra("obj", model);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity().getApplicationContext(), MedicineNotificationDialog.class);
+//        intent.putExtra("obj", model);
+//        startActivity(intent);
         Toast.makeText(getContext(), "onClick : " + position + " name " + model.getMedName(), Toast.LENGTH_SHORT).show();
     }
 
-    void setDayMedicines(String todayDate){
+    void setDayMedicines(String todayDate) {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
@@ -144,18 +145,19 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         medicineTime.clear();
-                        for (QueryDocumentSnapshot doc : value) {
-                            if (((HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay")).containsKey(selectedDate)) {
-                                Log.i("TAG", "key: " + ((HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay")).containsKey(selectedDate));
-                                Medicine medicine = new Medicine();
-                                medicine.setMedName(doc.getString("medName"));
-                                medicine.setMedStrength(doc.getDouble("medStrength"));
-                                medicine.setMedStrengthUnit(doc.getString("medStrengthUnit"));
-                                medicine.setMedRepeatingPerDay(doc.getLong("medRepeatingPerDay").intValue());
-                                medicine.setMedNumberOfPillsPerDose(doc.getLong("medNumberOfPillsPerDose").intValue());
-                                HashMap<String, List<DoseTime>> allTime = (HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay");
+                        for (QueryDocumentSnapshot doc : value)
+                            if (doc.getLong("active").intValue() == 1) {
+                                if (((HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay")).containsKey(selectedDate)) {
+                                    Log.i("TAG", "key: " + ((HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay")).containsKey(selectedDate));
+                                    Medicine medicine = new Medicine();
+                                    medicine.setMedName(doc.getString("medName"));
+                                    medicine.setMedStrength(doc.getDouble("medStrength"));
+                                    medicine.setMedStrengthUnit(doc.getString("medStrengthUnit"));
+                                    medicine.setMedRepeatingPerDay(doc.getLong("medRepeatingPerDay").intValue());
+                                    medicine.setMedNumberOfPillsPerDose(doc.getLong("medNumberOfPillsPerDose").intValue());
+                                    HashMap<String, List<DoseTime>> allTime = (HashMap<String, List<DoseTime>>) doc.get("medTimeDosesPerDay");
 
-                                int i = 0;
+                                    int i = 0;
                                     while (i < allTime.get(selectedDate).size()) {
                                         Log.i("TAG", "TimeDose: " + allTime.get(selectedDate).get(i));
                                         String[] time = String.valueOf(allTime.get(selectedDate).get(i)).split(",");
@@ -171,50 +173,51 @@ public class HomeFragment extends Fragment implements OnMedClickListener {
                                         } else {
                                             minute = minute.substring(minute.length() - 3, minute.length() - 1);
                                         }
-                                        medicineTime.add(new MedicineTimeList(medicine, get12Hrs(hour+":"+minute)));
+                                        medicineTime.add(new MedicineTimeList(medicine, get12Hrs(hour + ":" + minute)));
                                         Log.i("TAG", "onEvent: " + medicineTime.get(i).getMedicine().getMedName() + " -> " + medicineTime.get(i).getTime());
                                         ++i;
                                     }
                                     List<MedicineTimeList> amMedicines = new ArrayList<>();
                                     List<MedicineTimeList> pmMedicines = new ArrayList<>();
-                                    for(int x=0; x< medicineTime.size(); x++){
-                                        if(medicineTime.get(x).getTime().contains("AM")){
+                                    for (int x = 0; x < medicineTime.size(); x++) {
+                                        if (medicineTime.get(x).getTime().contains("AM")) {
                                             amMedicines.add(medicineTime.get(x));
-                                            Log.i("TAG", "am: " +  medicineTime.get(x).getMedicine().getMedName() + " -> " + medicineTime.get(x).getTime());
-                                        }else{
-                                        if(medicineTime.get(x).getTime().contains("PM")){
-                                            pmMedicines.add(medicineTime.get(x));
-                                            Log.i("TAG", "pm: " +  medicineTime.get(x).getMedicine().getMedName() + " -> " + medicineTime.get(x).getTime());
+                                            Log.i("TAG", "am: " + medicineTime.get(x).getMedicine().getMedName() + " -> " + medicineTime.get(x).getTime());
+                                        } else {
+                                            if (medicineTime.get(x).getTime().contains("PM")) {
+                                                pmMedicines.add(medicineTime.get(x));
+                                                Log.i("TAG", "pm: " + medicineTime.get(x).getMedicine().getMedName() + " -> " + medicineTime.get(x).getTime());
                                             }
                                         }
                                     }
                                     amMedicines.sort(Comparator.comparing(MedicineTimeList::getTime));
                                     pmMedicines.sort(Comparator.comparing(MedicineTimeList::getTime));
                                     medicineTime.clear();
-                                    for(int a =0; a<amMedicines.size(); a++){
+                                    for (int a = 0; a < amMedicines.size(); a++) {
                                         medicineTime.add(amMedicines.get(a));
                                     }
-                                    for(int b =0; b<pmMedicines.size(); b++){
+                                    for (int b = 0; b < pmMedicines.size(); b++) {
                                         medicineTime.add(pmMedicines.get(b));
                                     }
-                                adapter.setMyMedicines(medicineTime);
-                                adapter.notifyDataSetChanged();
+                                    adapter.setMyMedicines(medicineTime);
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    medicineTime.clear();
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
-                            else{
-                                medicineTime.clear();
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
+
                     }
                 });
     }
+
     public String get12Hrs(String time) {
         String[] splitString = time.split(":");
         String returnedDate = "";
-        if(Integer.valueOf(splitString[0]) >12){
-            returnedDate = (Integer.valueOf(splitString[0])/12)+":"+splitString[1]+" PM";
-        }else{
-            returnedDate = (Integer.valueOf(splitString[0]))+":"+splitString[1]+" AM";
+        if (Integer.valueOf(splitString[0]) > 12) {
+            returnedDate = (Integer.valueOf(splitString[0]) - 12) + ":" + splitString[1] + " PM";
+        } else {
+            returnedDate = (Integer.valueOf(splitString[0])) + ":" + splitString[1] + " AM";
         }
         return returnedDate;
     }

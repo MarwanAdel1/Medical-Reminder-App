@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/edite_bar"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="228dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:background="@color/gray"
+        android:gravity="right">
+
+        <ImageView
+            android:id="@+id/delete_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/delete_icon_black"></ImageView>
+
+        <ImageView
+            android:id="@+id/edite_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/edit_black_icon"></ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/medicine_details_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edite_bar"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/medicine_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:src="@mipmap/ic_pill"></ImageView>
+
+        <TextView
+            android:id="@+id/medicine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:text="Medicine Name"
+            android:textSize="25sp"
+            android:textColor="@color/black"></TextView>
+
+        <TextView
+            android:id="@+id/medicine_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:text="Scheduled for 12:00 PM"
+            android:textSize="20sp"
+            android:gravity="left"
+            android:textColor="@color/black"></TextView>
+
+        <TextView
+            android:id="@+id/medicine_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:text="255 g, take 1 Pill(s)"
+            android:textSize="20sp"
+            android:gravity="left"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/black"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/take_bar"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/medicine_details_layout"
+        android:orientation="horizontal"
+        android:background="@color/gray">
+
+        <ImageView
+            android:id="@+id/skip_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/close_ic"></ImageView>
+
+        <ImageView
+            android:id="@+id/take_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="70dp"
+            android:src="@drawable/checkmark"></ImageView>
+
+        <ImageView
+            android:id="@+id/reschedule_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="70dp"
+            android:src="@drawable/outline_alarm_black_24"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/take_bar_text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/take_bar"
+        android:orientation="horizontal"
+        android:background="@color/gray">
+
+        <TextView
+            android:id="@+id/skip_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="SKIP"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"></TextView>
+
+        <TextView
+            android:id="@+id/take_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TAKE"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"></TextView>
+
+        <TextView
+            android:id="@+id/reschedule_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="RESCHEDULE"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"></TextView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

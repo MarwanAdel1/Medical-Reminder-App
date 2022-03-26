@@ -18,6 +18,7 @@ import com.example.medicalreminder.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -35,6 +36,7 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
 
     private FirebaseFirestore firestore;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
         senderRequestsRecycle = view.findViewById(R.id.Sender_Requests_Recycle_fragment);
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         modellist = new ArrayList<>();
 
         friendsAdapter = new SenderFriendsAdapter(this, modellist);
@@ -75,57 +78,71 @@ public class SendRequestsFragment extends Fragment implements OnClickDeleteSendR
 
     public void getRequests() {
 
-        firestore.collection("Requests")
-                .document("SenderRequests")
-                .collection(firebaseAuth.getCurrentUser().getEmail())
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.d("TAG", "Error : " + error.getMessage());
-                        }
-                        modellist.clear();
-                        for (QueryDocumentSnapshot doc : value) {
+        if(user!=null){
 
-                            RequestModel model = new RequestModel();
-                            model.setSenderEmail(doc.getString("senderEmail"));
-                            model.setSenderName(doc.getString("senderName"));
-                            model.setReciverEmail(doc.getString("reciverEmail"));
-                            model.setReciverName(doc.getString("reciverName"));
-                            model.setStatus(doc.getString("status"));
-                            modellist.add(model);
+
+            firestore.collection("Requests")
+                    .document("SenderRequests")
+                    .collection(firebaseAuth.getCurrentUser().getEmail())
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if (error != null) {
+                                Log.d("TAG", "Error : " + error.getMessage());
+                            }
+                            modellist.clear();
+                            for (QueryDocumentSnapshot doc : value) {
+
+                                RequestModel model = new RequestModel();
+                                model.setSenderEmail(doc.getString("senderEmail"));
+                                model.setSenderName(doc.getString("senderName"));
+                                model.setReciverEmail(doc.getString("reciverEmail"));
+                                model.setReciverName(doc.getString("reciverName"));
+                                model.setStatus(doc.getString("status"));
+                                modellist.add(model);
+
+
+                            }
+                            friendsAdapter.setMyItems(modellist);
                             friendsAdapter.notifyDataSetChanged();
 
                         }
-                    }
-                });
+                    });
+        }else {
+            Toast.makeText(getContext(), "invalid", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void deleteRequest(RequestModel model) {
 
-        // delete the request from reciverRequests
-        firestore.collection("Requests")
-                .document("RecieverRequests")//
-                .collection(model.getReciverEmail()) // model.getreciverEmail ***********"noha@g.com"
-                .document(firebaseAuth.getCurrentUser().getEmail())//***********   model.getSenderEmail()    ***************
-                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(user!=null){
 
-        firestore.collection("Requests")
-                .document("SenderRequests")//
-                .collection(firebaseAuth.getCurrentUser().getEmail())//model.getSenderEmail()
-                .document(model.getReciverEmail())//  "noha@g.com"***********
-                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
-            }
-        });
+            // delete the request from reciverRequests
+            firestore.collection("Requests")
+                    .document("RecieverRequests")//
+                    .collection(model.getReciverEmail()) // model.getreciverEmail *****"noha@g.com"
+                    .document(firebaseAuth.getCurrentUser().getEmail())//****   model.getSenderEmail()    ******
+                    .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            firestore.collection("Requests")
+                    .document("SenderRequests")//
+                    .collection(firebaseAuth.getCurrentUser().getEmail())//model.getSenderEmail()
+                    .document(model.getReciverEmail())//  "noha@g.com"*****
+                    .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            Toast.makeText(getContext(),"invalid" ,Toast.LENGTH_SHORT).show();
+        }
 
     }
 

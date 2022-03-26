@@ -28,6 +28,9 @@ public class SenderFriendsAdapter extends RecyclerView.Adapter<SenderFriendsAdap
         this.myItems = myItems ;
     }
 
+    public void setMyItems(ArrayList<RequestModel> myItems){
+        this.myItems=myItems;
+    }
 
     @NonNull
     @Override

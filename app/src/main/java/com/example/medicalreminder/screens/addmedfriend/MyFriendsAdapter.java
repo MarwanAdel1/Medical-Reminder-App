@@ -27,6 +27,9 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
         this.myItems = myItems ;
     }
 
+    public void setMyItems(ArrayList<RequestModel> myItems){
+        this.myItems=myItems;
+    }
 
     @NonNull
     @Override

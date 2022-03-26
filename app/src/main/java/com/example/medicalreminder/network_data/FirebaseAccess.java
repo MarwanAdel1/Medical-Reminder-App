@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.medicalreminder.local_data.LocalLoginUserData;
+import com.example.medicalreminder.model.MedicineRepoInterface;
 import com.example.medicalreminder.pojo.Medicine;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicationActivityScreen;
-import com.example.medicalreminder.screens.add_medication_screen.view.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicationActivityScreen;
+import com.example.medicalreminder.screens.add_medication_screen.AddMedicineViewInterface;
+import com.example.medicalreminder.screens.home_screen.presenter.MedicationPresenterInterface;
 import com.example.medicalreminder.screens.home_screen.view.HomeActivityInterface;
 import com.example.medicalreminder.screens.login_screen.view.LoginScreenActivityInterface;
 import com.example.medicalreminder.screens.medication_drug_display_screen.view.MedicationDrugDispalyViewInterface;
@@ -29,24 +32,32 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class FirebaseAccess implements FirebaseAccessInterface {
     private static FirebaseAccess firebaseAccess = null;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase firebaseDatabase;
 
     private FirebaseAccess() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -56,6 +67,9 @@ public class FirebaseAccess implements FirebaseAccessInterface {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.setFirestoreSettings(settings);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true);
+
     }
 
     public static FirebaseAccess getInstance() {
@@ -121,7 +135,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
 
     public void userRegisteration(String email, String name, String phone, String password, String year, String month, String day, RegisterationActivityInterface activityInterface){
         //              Firebase database object to access firebase's realtime database.
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
+        DatabaseReference databaseReference = firebaseDatabase.getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
         //          Firebase elements
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         //  to check if the email already existed in firebase realtie database
@@ -161,7 +175,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
         //              Firebase element
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();;
         //              Firebase database object to access firebase's realtime database.
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
+        DatabaseReference databaseReference = firebaseDatabase.getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
 
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -217,7 +231,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
     @Override
     public void googleLogin(Intent data , LoginScreenActivityInterface loginInterface, Activity activity, LocalLoginUserData localFile){
         //              Firebase database object to access firebase's realtime database.
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
+        DatabaseReference databaseReference = firebaseDatabase.getReferenceFromUrl("https://medical-reminder-62cc4-default-rtdb.firebaseio.com/");
         //          For save email in shared preference
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
@@ -269,7 +283,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
 
     public void getUserData(String email, UserProfileActivityInterface activityInterface) {
         JSONObject returnObject = new JSONObject();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("users");
         databaseReference.keepSynced(true);
         databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -293,7 +307,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
     }
 
     public void saveUserdataAfterEditing(String email, String name, String phone, String dateOfBirth, UserProfileActivityInterface activityInterface){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("users");
         databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -314,7 +328,7 @@ public class FirebaseAccess implements FirebaseAccessInterface {
 
     public void getUserName(String email, HomeActivityInterface activityInterface){
         //              Firebase database object to access firebase's realtime database.
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference databaseReference = firebaseDatabase.getReference("users");
         if(!databaseReference.child(email).equals("no email")) {
             databaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -336,5 +350,46 @@ public class FirebaseAccess implements FirebaseAccessInterface {
     public void logout(){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signOut();
+    }
+
+    @Override
+    public void getMedication(String email, MedicineRepoInterface medicineRepoInterface, MedicationPresenterInterface medicationPresenterInterface) {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        List<Medicine> activeList = new ArrayList<>();
+        List<Medicine> inactiveList = new ArrayList<>();
+        if (user != null) {
+            firebaseFirestore.collection("Medicines")
+                    .document(email)
+                    .collection("Dependant Name")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            for (QueryDocumentSnapshot doc : value) {
+                                Medicine medicine = new Medicine();
+
+                                medicine.setMedName(doc.getString("medName"));
+                                medicine.setMedForm(doc.getString("medForm"));
+                                medicine.setMedStrength(doc.getDouble("medStrength"));
+                                medicine.setMedStrengthUnit(doc.getString("medStrengthUnit"));
+                                medicine.setMedReason(doc.getString("medReason"));
+                                medicine.setMedRepeatingFrequency(doc.getLong("medRepeatingFrequency").intValue());
+                                medicine.setMedRepeatingPerDay(doc.getLong("medRepeatingPerDay").intValue());
+                                medicine.setMedRepeatingPerWeek(doc.getLong("medRepeatingPerWeek").intValue());
+                                medicine.setStartDate(doc.getString("startDate"));
+
+
+                                medicine.setActive(doc.getLong("active").intValue());
+                                if (medicine.getActive() == 1) { // active
+                                    activeList.add(medicine);
+                                } else if (medicine.getActive() == 0) { // not active
+                                    inactiveList.add(medicine);
+                                }
+                            }
+
+                            medicineRepoInterface.returnMedicines(activeList, inactiveList, medicationPresenterInterface);
+                        }
+                    });
+        }
     }
 }
